@@ -1,13 +1,12 @@
 doctype html
 html
-
   head
     meta(charset='utf-8')
     link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
     link(rel="stylesheet" href="/reveal/css/reveal.css")
     link(rel="stylesheet" href="/reveal/css/theme/white.css")
+    link( rel="stylesheet" href="/reveal/lib/css/zenburn.css")
   body
-
     div.reveal
       div.slides
         section
@@ -90,8 +89,19 @@ html
           h3 안에 있는 내용 다 지웁니다 ㅡㅡ
           img(data-src='http://i.imgur.com/kBHm2Wm.png')
         section
-          h3 아래와 같이 입력합니다
-          img(data-src='http://i.imgur.com/kWp5vht.png')
+          section
+            h3 아래와 같이 입력합니다(안보이면 화살표 아래 버튼)
+            img(data-src='http://i.imgur.com/kWp5vht.png')
+          section
+            pre
+              code(data-trim nodata-escape).
+                var http = require('http')
+                var server = http.createServer( (request,response) => {
+                  response.write('success')
+                  response.end()
+                })
+                server.listen(process.env.PORT, () => console.log('good'))
+
         section
           h3 우측 상단의 show live 버튼을 누릅니다.
         section
@@ -104,15 +114,41 @@ html
             h4 이제 웹개발을 하고싶은 의욕이 생겼나요?
             h2 다음시간엔 이것보다 더 많은 일을 하는 서버를 만들어보겠습니다.
         section
-            h3 감사합니다.
+            h3 감사합니다
 
 
-
-
-
-
-
-
+    script(src="/reveal/lib/js/head.min.js")
     script(src="/reveal/js/reveal.js")
     script.
-      Reveal.initialize()
+      Reveal.initialize(
+
+        {
+          previewLinks:true,
+          dependencies: [
+                  // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+        { src: '/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+
+        // Interpret Markdown in <section> elements
+        { src: '/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: '/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+
+        // Zoom in and out with Alt+click
+        { src: '/reveal/plugin/zoom-js/zoom.js', async: true },
+
+        // Speaker notes
+        { src: '/reveal/plugin/notes/notes.js', async: true },
+
+        // MathJax
+        { src: '/reveal/plugin/math/math.js', async: true },
+
+            {
+              src: '/reveal/plugin/highlight/highlight.js',
+              async: true,
+              callback: function () {
+                hljs.initHighlightingOnLoad();
+              }
+            }
+            ]
+        }
+
+        )
