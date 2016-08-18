@@ -1,0 +1,53 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    link(rel="stylesheet" href="/reveal/css/reveal.css")
+    link(rel="stylesheet" href="/reveal/css/theme/white.css")
+    link( rel="stylesheet" href="/reveal/lib/css/zenburn.css")
+    script(src='https://code.jquery.com/jquery-3.1.0.min.js')
+    script.
+      $(document).ready( function () {
+        $('dl.directory dd').addClass('text-muted')
+        })
+
+
+  body
+    div.reveal
+      div.slides
+        section
+          h1 node.js로 서버 만들기
+          h3 익게이
+          h4
+            span.text-info 고객이 무얼 원하는지 알아보자
+        section
+          p.text-primary.
+            저번시간에, 우리는 드디어 서버를 만들어봤습니다.
+          h4.fragment 그런데 기능이 너무 시시했죠
+          h4.fragment
+            span.text-danger 오늘은 더 다양한 일을 하는 아이를 만들어봅시다!!
+        section
+          a(href='https://hyperdev.com' target='_blank') hyperdev
+          p 아직 설정하기 귀찮으니까 여길 계속 이용합시다
+        section
+          p 현재 hyperdev의 구조는 대충 이렇게 생겼죠
+          dl.directory
+            dt backend
+            dd .env
+            dd package.json
+            dd server.js
+              span.fragment.text-danger <= 오늘은 이것만 바꿀겁니다
+            dt front end
+            dd public/client.js
+            dd public/style.css
+            dd views/index.html
+        section
+          h3
+            span.text-danger 우리의 라이벌, 세연넷을 잠시 관찰해봅시다.
+          img(data-src='http://i.imgur.com/GQbAtdV.png')
+
+
+    script(src="/reveal/lib/js/head.min.js")
+    script(src="/reveal/js/reveal.js")
+    script(src='/reveal_config.js')
