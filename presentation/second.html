@@ -26,11 +26,16 @@ server( (req,res) => {
 var server = http.createServer
 server( (req,res) => {
   var url = req.url.replace('/','') // '/' 지워버림
-  if (url.match(/[0-9]+\w*[+-/*]{1}\w*[0-9]+$/)) //설명할 예정
+  if (url.match(/[0-9]+\s*[+-/*]{1}\s*[0-9]+$/)) //설명할 예정
     res.write(`the result is:${eval(url)}`)
     //eval => 문자를 식으로 계산하는 함수(실제 개발할땐 가급적 쓰지말것!)
   else
     res.write('wrong input ex) 111+11')
   res.end()
-}).listen(process.env.PORT, ()=>console.log('good'))</code></pre></section><section><h3>자, 잘 작동하나요?</h3><ul><li>url에 111+111 => 222</li><li>url에 222=222 => wrong input</li></ul></section><section><p>아까 썼던 정규식을 풀어 설명해볼게요</p><pre><code>/[0-9]+\w*[+-/*]{1}\w*[0-9]+$/</code></pre><ul><li>[0-9]+: 숫자 1개 이상</li><li>\w*: 공백 0개 이상</li><li>[+-/*]{1}: + or - or / or *이라는 기호가 딱 1개</li><li>\w*[0-9]+$: 공백이 0개이상, 숫자가 1개이상 그리고 숫자 바로뒤엔 문자열이 끝나야 한다</li></ul></section><section><p>url은 문자열로 이뤄져 있습니다</p><h3>따라서, 정규식을 적당히 활용하면 서버가 매우 유연해집니다.</h3></section><section><h3>숙제: url로 다항식 미분 구현해보기</h3><p>ex) $x^3 + x^2 + 1$ => $3x^2 + 2x$</p><ul><li>at url: x^3 + x^2 + 1</li><li>response: 3^2 + 2x </li></ul><p>hint: 정규식에서 () 는 어디에 쓰는 표현이게요?</p><p><pre><code>var matched = '1111ddd'.match(/([0-9]*)ddd/)
+}).listen(process.env.PORT, ()=>console.log('good'))</code></pre></section><section><h3>자, 잘 작동하나요?</h3><ul><li>url에 111+111 => 222</li><li>url에 222=222 => wrong input</li></ul></section><section><section><p>아까 썼던 정규식을 풀어 설명해볼게요</p><pre><code>/[0-9]+\s*[+-/*]{1}\s*[0-9]+$/</code></pre><ul><li>[0-9]+: 숫자 1개 이상</li><li>\s*: 공백 0개 이상</li><li>[+-/*]{1}: + or - or / or *이라는 기호가 딱 1개</li><li>\s*[0-9]+$: 공백이 0개이상, 숫자가 1개이상 그리고 숫자 바로뒤엔 문자열이 끝나야 한다</li></ul><p>(화살표 아래에 예제 수록)</p></section><section><pre><code>var reg = /[0-9]+\s*[+-/*]{1}\s*[0-9]+$/
+reg.test('111+222') // true
+reg.test('111^222') // false
+reg.test('111+  222') // true
+
+</code></pre></section></section><section><p>url은 문자열로 이뤄져 있습니다</p><h3>따라서, 정규식을 적당히 활용하면 서버가 매우 유연해집니다.</h3></section><section><h3>숙제: url로 다항식 미분 구현해보기</h3><p>ex) $x^3 + x^2 + 1$ => $3x^2 + 2x$</p><ul><li>at url: x^3 + x^2 + 1</li><li>response: 3^2 + 2x</li></ul><p>hint: 정규식에서 () 는 어디에 쓰는 표현이게요?</p><p><pre><code>var matched = '1111ddd'.match(/([0-9]*)ddd/)
 </code></pre><span>hint2: 위에서 matched에 저장되는 값은?</span></p></section><section><p>다음시간엔,</p><h3>csv파일을 저장하고 읽고 쓰는 방법을 배워보겠습니다.</h3><p>감사합니다!</p></section></div></div><script src="/reveal/lib/js/head.min.js"></script><script src="/reveal/js/reveal.js"></script><script src="/reveal_config.js"></script></body></html>
