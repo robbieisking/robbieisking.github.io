@@ -2,6 +2,8 @@ Reveal.initialize(
 
   {
     previewLinks:true,
+    slideNumber:true,
+    history:true,
     dependencies: [
             // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
           { src: '/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
