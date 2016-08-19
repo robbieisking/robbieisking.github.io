@@ -41,10 +41,18 @@
 </div>
 <footer class=footer>
   <div class=container>
-    <p class='text-center text-muted'>©2016 익게이 all right reserved </p>
+    <p class='text-center text-muted'></p>
   </div>
 </footer>
   <script type='text/babel' src='js/index.js'> </script>
+  <script type='text/babel'> 
+    //날짜 자동 갱신
+    let date = new Date()
+    let year = date.getFullYear() 
+    $(document).ready( () => {
+        $('.footer div.container p').text(`©${year} 익게이 all right reserved` )
+       })
+  </script>
 </body>
 
 </html>

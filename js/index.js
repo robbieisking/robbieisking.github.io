@@ -1,7 +1,7 @@
 class IndexBox extends React.Component {
   constructor(props){
     super(props)
-    this.state = {data: []} 
+    this.state = {data: []}  // 여기에 list들이 들어갈거임
   }
   componentDidMount () {
     $.ajax ( {
@@ -9,7 +9,6 @@ class IndexBox extends React.Component {
       dataType:'json',
       cache:false,
       success: (data) => {
-        console.log('ajaxed')
         this.setState({data})
       },
       error:(xhr,status,err) => {
@@ -33,7 +32,7 @@ class IndexList extends React.Component {
   render () {
     let indexes = this.props.data.map( (index) => {
       return (
-        <div className='indexes' className='col-sm-6'>
+        <div className='indexes' className='col-sm-6'> {/*bootstrap grid: 총 12구역, 6은 반절 쓰겠다는거.*/}
           <h3 > {index.title} </h3>
           <Index contents={index.contents}/>
         </div>
@@ -50,7 +49,6 @@ class IndexList extends React.Component {
 }
 
 class Index extends React.Component {
-
   render () {
     let contents = this.props.contents.map ( (content) => {
      return (
