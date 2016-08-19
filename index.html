@@ -46,7 +46,7 @@
 
   </div>
 <footer >
-    <p class='text-center text-muted'></p>
+    <p class='text-center text-muted' id='reserved'></p>
     <h4 class='text-center text-danger'> Disclaimer </h4>
     <p class='text-center'> 이 페이지에 나온 내용을 활용한 어떠한 행동에 대해서도 전적으로 책임지지 않습니다. </p>
 </footer>
@@ -56,7 +56,7 @@
     let date = new Date()
     let year = date.getFullYear() 
     $(document).ready( () => {
-        $('footer p').text(`©${year} 익게이 all right reserved` )
+        $('footer p #reserved').text(`©${year} 익게이 all right reserved` )
        })
   </script>
 </body>
