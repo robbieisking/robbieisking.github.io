@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    meta(charset='utf-8')
+    meta(charset='utf-8' name='viewpoint' content='width=device-width,initial-scale=1.0')
     link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
     link(rel="stylesheet" href="/reveal/css/reveal.css")
     link(rel="stylesheet" href="/reveal/css/theme/white.css")
@@ -14,233 +14,234 @@ html
 
 
   body
-    div.reveal
-      div.slides
-        section
-          h1 node.js로 서버 만들기
-          h3 익게이
-          h4
-            span.text-info 고객이 무얼 원하는지 알아보자
-        section
-          p.text-primary.
-            저번시간에, 우리는 드디어 서버를 만들어봤습니다.
-          h4.fragment 그런데 기능이 너무 시시했죠
-          h4.fragment
-            span.text-danger 오늘은 더 다양한 일을 하는 아이를 만들어봅시다!!
-        section
-          a(href='https://hyperdev.com' target='_blank') hyperdev
-          p 아직 설정하기 귀찮으니까 여길 계속 이용합시다
-        section
-          p 현재 hyperdev의 구조는 대충 이렇게 생겼죠
-          dl.directory
-            dt backend
-            dd .env
-            dd package.json
-            dd server.js
-              span.fragment.text-danger <= 오늘은 이것만 바꿀겁니다
-            dt front end
-            dd public/client.js
-            dd public/style.css
-            dd views/index.html
-        section
-          h3
-            span.text-danger 우리의 라이벌, 세연넷을 잠시 관찰해봅시다.
-          img(data-src='http://i.imgur.com/GQbAtdV.png')
-          p.fragment.
-            유저가 익게로 가고싶다고 <strong> url </strong>로 요청하면, 세연넷은 익게를 보여줍니다.
-        section
-          h3
-            span.text-primary 즉, 우리는 유저가 어떤 url로 요청하는지 알고 있어야 합니다!
-        section
-          h3 아래와 같이 입력해보세요
-          p.text-muted server.js
-          pre
-            code.
+    div.container
+      div.reveal
+        div.slides
+          section
+            h1 node.js로 서버 만들기
+            h3 익게이
+            h4
+              span.text-info 고객이 무얼 원하는지 알아보자
+          section
+            p.text-primary.
+              저번시간에, 우리는 드디어 서버를 만들어봤습니다.
+            h4.fragment 그런데 기능이 너무 시시했죠
+            h4.fragment
+              span.text-danger 오늘은 더 다양한 일을 하는 아이를 만들어봅시다!!
+          section
+            a(href='https://hyperdev.com' target='_blank') hyperdev
+            p 아직 설정하기 귀찮으니까 여길 계속 이용합시다
+          section
+            p 현재 hyperdev의 구조는 대충 이렇게 생겼죠
+            dl.directory
+              dt backend
+              dd .env
+              dd package.json
+              dd server.js
+                span.fragment.text-danger <= 오늘은 이것만 바꿀겁니다
+              dt front end
+              dd public/client.js
+              dd public/style.css
+              dd views/index.html
+          section
+            h3
+              span.text-danger 우리의 라이벌, 세연넷을 잠시 관찰해봅시다.
+            img(data-src='http://i.imgur.com/GQbAtdV.png')
+            p.fragment.
+              유저가 익게로 가고싶다고 <strong> url </strong>로 요청하면, 세연넷은 익게를 보여줍니다.
+          section
+            h3
+              span.text-primary 즉, 우리는 유저가 어떤 url로 요청하는지 알고 있어야 합니다!
+          section
+            h3 아래와 같이 입력해보세요
+            p.text-muted server.js
+            pre
+              code.
+                  var http = require('http')
+                  var server = http.createServer
+
+                  server( (request,response) => {
+                    response.write(request.url)
+                    response.end()
+                  }).listen(process.env.PORT, () => console.log(`server connected at ${process.env.PORT} `))
+          section
+            h3 그리고 show live 버튼을 클릭해보세요
+            h3.fragment 이제 url 뒷부분에 아무 문자나 쳐보세요!
+            img(src='http://i.imgur.com/IzPUxKi.png')
+          section
+            h4 어떤가요?! url에 따라 출력이 달라지는걸 확인하셨나요?
+            h3
+              span.text-primary 여러분은 방금 서버의 가장 중요한 기능을 배우셨습니다.
+          section
+            dl
+              dt 서버는
+              dd 어떤 url 요청이 올지 미리 예측하고
+              dd 예측된 요청이 왔을때, 고객님이 원하는 자료를
+              dd <span class='text-primary'>정적</span> 또는 <span class='text-info'> 동적</span>으로 제공해주는 것이 전부입니다.
+          section
+            p 특히 동적으로 제공해주는 놈이
+            h3 app server입니다.
+          section
+            h3 그러니까 server는 url를 인자로 받는 함수인 샘이죠.
+            p.
+              $f(url) = response$
+          section
+            h3 물론, 요청은 url말고도 몇가지 종류가 더 있습니다
+            ul
+              li post: http body
+              li json(post): http body
+              li socket
+              li etc...
+            p 하지만, 요청의 종류가 다르다고 처리하는 원리가 크게 다르진 않습니다.
+          section
+            h3 조금만 더 url가지고 장난을 쳐볼까요?
+            p.text-muted server.js
+            pre
+              code.
                 var http = require('http')
                 var server = http.createServer
+                server( (req,res) => {
+                  var url = req.url
 
-                server( (request,response) => {
-                  response.write(request.url)
-                  response.end()
-                }).listen(process.env.PORT, () => console.log(`server connected at ${process.env.PORT} `))
-        section
-          h3 그리고 show live 버튼을 클릭해보세요
-          h3.fragment 이제 url 뒷부분에 아무 문자나 쳐보세요!
-          img(src='http://i.imgur.com/IzPUxKi.png')
-        section
-          h4 어떤가요?! url에 따라 출력이 달라지는걸 확인하셨나요?
-          h3
-            span.text-primary 여러분은 방금 서버의 가장 중요한 기능을 배우셨습니다.
-        section
-          dl
-            dt 서버는
-            dd 어떤 url 요청이 올지 미리 예측하고
-            dd 예측된 요청이 왔을때, 고객님이 원하는 자료를
-            dd <span class='text-primary'>정적</span> 또는 <span class='text-info'> 동적</span>으로 제공해주는 것이 전부입니다.
-        section
-          p 특히 동적으로 제공해주는 놈이
-          h3 app server입니다.
-        section
-          h3 그러니까 server는 url를 인자로 받는 함수인 샘이죠.
-          p.
-            $f(url) = response$
-        section
-          h3 물론, 요청은 url말고도 몇가지 종류가 더 있습니다
-          ul
-            li post: http body
-            li json(post): http body
-            li socket
-            li etc...
-          p 하지만, 요청의 종류가 다르다고 처리하는 원리가 크게 다르진 않습니다.
-        section
-          h3 조금만 더 url가지고 장난을 쳐볼까요?
-          p.text-muted server.js
-          pre
-            code.
-              var http = require('http')
-              var server = http.createServer
-              server( (req,res) => {
-                var url = req.url
+                  if(url.match(/\/[0-9]+$/))
+                    res.write('only number')
+                  else if(url.match(/\/[a-zA-Z]+$/))
+                    res.write('only english')
+                  else
+                    res.write('ummm mixed?')
 
-                if(url.match(/\/[0-9]+$/))
-                  res.write('only number')
-                else if(url.match(/\/[a-zA-Z]+$/))
-                  res.write('only english')
-                else
-                  res.write('ummm mixed?')
-
-                res.end()
-              }).listen(process.env.PORT, () => console.log('good'))
-        section
-          h3 이번엔 어떤가요? url에 아무거나 쳐보세요
-          ul.fragment
-            li 숫자만 치면 => only number
-            li 영어만 치면 => only english
-            li 그 외엔 => umm mixed?
-          p.fragment 이렇게 출력되는걸 확인하셨나요?
-        section
-          p 하지만 저 코드, 뭔가 이상하지않나요?
-          pre
-            code.
-              url.match(/\/[0-9]+$/)
-          p 으아니 코드양반, 이게 무슨 소리요...
-          p.fragment.text-danger 내가 코딩고자라, 이말이오?
-        section
-          h3 아까의 외계어는 정규식(Regex)라는 표현입니다.
-          ul
-            li 정규식은 문자열의 특징을 파악합니다
-            li 예를 들어 '111'는 아래와 같이 해석할 수 있습니다
-              ul
-                li 숫자 3개
-                  pre
-                    code /[0-9]{3}/
-                li 숫자 1개 이상
-                  pre
-                    code /[0-9]+/
-                li 시작도 숫자고 끝도 숫자
-                  pre
-                    code /^[0-9].*[0-9]$/
-        section
-          h3 아래와 같이 이상한 기호를 사용합니다
-          table.table-responsive
-            thead
-              tr
-                td 기호
-                td 의미
-                td 예제
-            tbody
-              tr
-                td [...]
-                td [] 안에있는 종류의 문자와 매치
-                td [0-9]: 0부터 9까지, [a-z]: a부터 z까지
-              tr
-                td {n,m}
-                td 앞에 있는 패턴이 n번 이상 m번 이하 나온다
-                td d{1,3}: d가 1개 이상 3개 이하, \d{3}: 숫자가 3번( \d == [0-9])
-              tr
-                td ^ or $
-                td 문자시작 or 문자 끝
-                td ^111$: 111 외에는 공백포함 아무것도 없는 문장
-
-        section
-          p 정규식은 언어마다 표현이 조금씩 다르기 때문에 레퍼런스를 항상 참고합시다
-          p
-            a(href='https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/%EC%A0%95%EA%B7%9C%EC%8B%9D').
-              javascript 정규식(Mozilla)
-
-        section
-          p Q: 헐...정규식만 보면 토나와요... 저 개발에 재능 없는건가요?
-          h3.fragment ㄴㄴ;;; 개발자들도 토나오는게 정규식입니다.
-          h3.fragment 규식이 하고는 꼭 필요할 때만 같이 놀면 됩니다.
-          h3.fragment <del>규식이 불쌍 ㅜㅜ</del>
-        section
-          p Q: 아 근데, 왜 초보한테 규식이랑 놀라구 해요...
-          h3.fragment
-            span.text-info ㅋㅋㅋㅋ 너무 쉬우면 정떨어질까봐 ㅋㅋㅋ
-        section
-          p 그리고 규식이는 생긴게 못생겼을 뿐이지, 규칙은 생각보다 간단합니다
-          h3 기왕 규식이를 불렀으니, <span class='text-danger'> 규식이로 계산기 만들어봅시다</span>
-        section
-          p.text-muted server.js
-          pre
-            code.
-              var http = require('http')
-              var server = http.createServer
-              server( (req,res) => {
-                var url = req.url.replace('/','') // '/' 지워버림
-                if (url.match(/[0-9]+\s*[+-/*]{1}\s*[0-9]+$/)) //설명할 예정
-                  res.write(`the result is:${eval(url)}`)
-                  //eval => 문자를 식으로 계산하는 함수(실제 개발할땐 가급적 쓰지말것!)
-                else
-                  res.write('wrong input ex) 111+11')
-                res.end()
-              }).listen(process.env.PORT, ()=>console.log('good'))
-        section
-          h3 자, 잘 작동하나요?
-          ul
-            li url에 111+111 => 222
-            li url에 222=222 => wrong input
-        section
+                  res.end()
+                }).listen(process.env.PORT, () => console.log('good'))
           section
-            p 아까 썼던 정규식을 풀어 설명해볼게요
+            h3 이번엔 어떤가요? url에 아무거나 쳐보세요
+            ul.fragment
+              li 숫자만 치면 => only number
+              li 영어만 치면 => only english
+              li 그 외엔 => umm mixed?
+            p.fragment 이렇게 출력되는걸 확인하셨나요?
+          section
+            p 하지만 저 코드, 뭔가 이상하지않나요?
             pre
               code.
-                /[0-9]+\s*[+-/*]{1}\s*[0-9]+$/
+                url.match(/\/[0-9]+$/)
+            p 으아니 코드양반, 이게 무슨 소리요...
+            p.fragment.text-danger 내가 코딩고자라, 이말이오?
+          section
+            h3 아까의 외계어는 정규식(Regex)라는 표현입니다.
             ul
-              li [0-9]+: 숫자 1개 이상
-              li \s*: 공백 0개 이상
-              li [+-/*]{1}: + or - or / or *이라는 기호가 딱 1개
-              li \s*[0-9]+$: 공백이 0개이상, 숫자가 1개이상 그리고 숫자 바로뒤엔 문자열이 끝나야 한다
-            p (화살표 아래에 예제 수록)
+              li 정규식은 문자열의 특징을 파악합니다
+              li 예를 들어 '111'는 아래와 같이 해석할 수 있습니다
+                ul
+                  li 숫자 3개
+                    pre
+                      code /[0-9]{3}/
+                  li 숫자 1개 이상
+                    pre
+                      code /[0-9]+/
+                  li 시작도 숫자고 끝도 숫자
+                    pre
+                      code /^[0-9].*[0-9]$/
           section
+            h3 아래와 같이 이상한 기호를 사용합니다
+            table.table-responsive
+              thead
+                tr
+                  td 기호
+                  td 의미
+                  td 예제
+              tbody
+                tr
+                  td [...]
+                  td [] 안에있는 종류의 문자와 매치
+                  td [0-9]: 0부터 9까지, [a-z]: a부터 z까지
+                tr
+                  td {n,m}
+                  td 앞에 있는 패턴이 n번 이상 m번 이하 나온다
+                  td d{1,3}: d가 1개 이상 3개 이하, \d{3}: 숫자가 3번( \d == [0-9])
+                tr
+                  td ^ or $
+                  td 문자시작 or 문자 끝
+                  td ^111$: 111 외에는 공백포함 아무것도 없는 문장
+
+          section
+            p 정규식은 언어마다 표현이 조금씩 다르기 때문에 레퍼런스를 항상 참고합시다
+            p
+              a(href='https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/%EC%A0%95%EA%B7%9C%EC%8B%9D').
+                javascript 정규식(Mozilla)
+
+          section
+            p Q: 헐...정규식만 보면 토나와요... 저 개발에 재능 없는건가요?
+            h3.fragment ㄴㄴ;;; 개발자들도 토나오는게 정규식입니다.
+            h3.fragment 규식이 하고는 꼭 필요할 때만 같이 놀면 됩니다.
+            h3.fragment <del>규식이 불쌍 ㅜㅜ</del>
+          section
+            p Q: 아 근데, 왜 초보한테 규식이랑 놀라구 해요...
+            h3.fragment
+              span.text-info ㅋㅋㅋㅋ 너무 쉬우면 정떨어질까봐 ㅋㅋㅋ
+          section
+            p 그리고 규식이는 생긴게 못생겼을 뿐이지, 규칙은 생각보다 간단합니다
+            h3 기왕 규식이를 불렀으니, <span class='text-danger'> 규식이로 계산기 만들어봅시다</span>
+          section
+            p.text-muted server.js
             pre
               code.
-                var reg = /[0-9]+\s*[+-/*]{1}\s*[0-9]+$/
-                reg.test('111+222') // true
-                reg.test('111^222') // false
-                reg.test('111+  222') // true
+                var http = require('http')
+                var server = http.createServer
+                server( (req,res) => {
+                  var url = req.url.replace('/','') // '/' 지워버림
+                  if (url.match(/[0-9]+\s*[+-/*]{1}\s*[0-9]+$/)) //설명할 예정
+                    res.write(`the result is:${eval(url)}`)
+                    //eval => 문자를 식으로 계산하는 함수(실제 개발할땐 가급적 쓰지말것!)
+                  else
+                    res.write('wrong input ex) 111+11')
+                  res.end()
+                }).listen(process.env.PORT, ()=>console.log('good'))
+          section
+            h3 자, 잘 작동하나요?
+            ul
+              li url에 111+111 => 222
+              li url에 222=222 => wrong input
+          section
+            section
+              p 아까 썼던 정규식을 풀어 설명해볼게요
+              pre
+                code.
+                  /[0-9]+\s*[+-/*]{1}\s*[0-9]+$/
+              ul
+                li [0-9]+: 숫자 1개 이상
+                li \s*: 공백 0개 이상
+                li [+-/*]{1}: + or - or / or *이라는 기호가 딱 1개
+                li \s*[0-9]+$: 공백이 0개이상, 숫자가 1개이상 그리고 숫자 바로뒤엔 문자열이 끝나야 한다
+              p (화살표 아래에 예제 수록)
+            section
+              pre
+                code.
+                  var reg = /[0-9]+\s*[+-/*]{1}\s*[0-9]+$/
+                  reg.test('111+222') // true
+                  reg.test('111^222') // false
+                  reg.test('111+  222') // true
 
 
-        section
-          p url은 문자열로 이뤄져 있습니다
-          h3 따라서, 정규식을 적당히 활용하면 서버가 매우 유연해집니다.
-        section
-          h3 숙제: url로 다항식 미분 구현해보기
-          p ex) $x^3 + x^2 + 1$ => $3x^2 + 2x$
-          ul
-            li at url: x^3 + x^2 + 1
-            li response: 3^2 + 2x
-          p hint: 정규식에서 () 는 어디에 쓰는 표현이게요?
-          p
-            pre
-              code.
-                var matched = '1111ddd'.match(/([0-9]*)ddd/)
+          section
+            p url은 문자열로 이뤄져 있습니다
+            h3 따라서, 정규식을 적당히 활용하면 서버가 매우 유연해집니다.
+          section
+            h3 숙제: url로 다항식 미분 구현해보기
+            p ex) $x^3 + x^2 + 1$ => $3x^2 + 2x$
+            ul
+              li at url: x^3 + x^2 + 1
+              li response: 3^2 + 2x
+            p hint: 정규식에서 () 는 어디에 쓰는 표현이게요?
+            p
+              pre
+                code.
+                  var matched = '1111ddd'.match(/([0-9]*)ddd/)
 
-            span hint2: 위에서 matched에 저장되는 값은?
-        section
-          p 다음시간엔,
-          h3 csv파일을 저장하고 읽고 쓰는 방법을 배워보겠습니다.
-          p 감사합니다!
+              span hint2: 위에서 matched에 저장되는 값은?
+          section
+            p 다음시간엔,
+            h3 csv파일을 저장하고 읽고 쓰는 방법을 배워보겠습니다.
+            p 감사합니다!
 
 
 
