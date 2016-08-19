@@ -51,9 +51,14 @@ class IndexList extends React.Component {
 class Index extends React.Component {
   render () {
     let contents = this.props.contents.map ( (content) => {
-     return (
-      <li ><a href={content.href} target={content.target}> {content.subtitle} </a></li> 
-     ) 
+      if(content.suppliment)
+       return (
+        <li ><a href={content.href} target={content.target}> {content.subtitle} </a></li> 
+       ) 
+      else
+        return (
+          <li ><a href={content.href} target={content.target}> {content.subtitle} </a></li> 
+         )
       
     })
     return (
