@@ -1,0 +1,94 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    link(rel="stylesheet" href="/reveal/css/reveal.css")
+    link(rel="stylesheet" href="/reveal/css/theme/white.css")
+    link( rel="stylesheet" href="/reveal/lib/css/zenburn.css")
+    script(src='https://code.jquery.com/jquery-3.1.0.min.js')
+    script.
+      $(document).ready( function () {
+        $('dl.directory dd').addClass('text-muted')
+        })
+
+
+  body
+    div.reveal
+      div.slides
+        section
+          h1 node로 웹서버 만들기
+          h4 익게이
+        section
+          p 이번시간엔, 서버 안에 있는 파일을 읽고
+          p.fragment 쓰고
+          h3.fragment 그리고 바꿔볼 것 입니다.
+        section
+          p 아 참고로, 나중에 웹 개발을 할 때엔
+          p database라는 녀석을 쓸텐데요,
+          h3.fragment 지금은 그 녀석을 직접 만드신다고 생각하면 됩니다.
+        section
+          h3 csv 파일이란?
+          p 아래와 같이 생긴 녀석을 말합니다
+
+          pre
+            code.
+              name,email,school
+              김연세,yonsei@yonsei.ac.kr,yonsei
+              박고대,korea@korea.ac.kr,korea
+        section
+          h3 즉,
+            span.text-info comma(,)등 구분기호로 열이 구분된 파일입니다.
+          p 엑셀 파일도 일종의 csv라고 보시면 됩니다.
+          p (제한적이지만 xls $\leftrightarrow$ csv 상호 변환도 가능하죠)
+        section
+          p 자 오늘도 <a href='https://hyperdev.com'>여기</a>를 이용합시다
+        section(data-background-image='http://i.imgur.com/muvclbK.png' data-background-size='90%')
+        section(data-background-image='http://i.imgur.com/CGTxIGz.png' data-background-size='90%')
+          h3
+            span.text-info 이렇게 아무렇게나 적으세요(형식에 맞춰서)
+        section
+          h3 그다음 아래와같은 코드를 입력합니다.
+          p.text-muted server.js
+          pre
+            code.
+              var fs = require('fs')
+              var server = require('http').createServer 
+              server( (req,res) => {
+                var data = fs.readFileSync('me.csv')
+                res.write(data)
+                res.end()
+              }).listen(process.env.PORT, () => console.log('good'))
+        section
+          p 그리고 show live 버튼을 클릭해보세요,
+          h3.fragment 우리가 입력했던 csv파일이 그대로 나오나요?
+        section
+          p 우리가 무슨짓을 했기에 파일을 읽을 수 있었던거죠?
+          p.fragment 바로 fs라는 놈 때문입니다.
+          p.fragment fs는 node에서 기본적으로 제공하는 페키지로,
+          h3.fragment file system의 약자이며, 시스템 파일을 간편하게 읽게 해줍니다.
+          p.fragment (이렇게 기존의 기능을 간편한 인터페이스로 이용할 수 있게 해주는 함수를 wrapper(감싸는 아이)라고 합니다,이건 몰라도 좋아요) 
+        section
+          p 그러면 fs의 사용법부터 짚고 넘어갑시다.
+
+          h3 async manner
+          pre
+            code.
+              fs.readFile('me.csv', function(err,data) {
+                console.log(data)
+              })
+          h3 sync manner
+          pre
+            code.
+              var data = fs.readFileSync('me.csv')
+              console.log(data)
+        section
+          p async,sync가 무엇인지 모르겠는 분은
+          p <a href='https://gist.github.com/robbieisking/ea00bc1d2e4c8dd39df838c7207a7988'>제가 쓴 글</a>을 참고하세요
+          p 물론 지금부터 간단히 설명하긴 하겠습니다.
+          p 사실 이 둘의 차이를 이해하는 것이 node의 시작이며
+          h3.fragment 그리고 전부이기도 합니다
+
+    script(src="/reveal/lib/js/head.min.js")
+    script(src="/reveal/js/reveal.js")
+    script(src='/reveal_config.js')

@@ -1,0 +1,95 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"><link rel="stylesheet" href="/reveal/css/reveal.css"><link rel="stylesheet" href="/reveal/css/theme/white.css"><link rel="stylesheet" href="/reveal/lib/css/zenburn.css"><script src="https://code.jquery.com/jquery-3.1.0.min.js"></script><script>$(document).ready( function () {
+  $('dl.directory dd').addClass('text-muted')
+  })
+
+</script></head><body><div class="reveal"><div class="slides"><section><h1>node로 웹서버 만들기</h1><h4>익게이</h4></section><section><p>이번시간엔, 서버 안에 있는 파일을 읽고</p><p class="fragment">쓰고</p><h3 class="fragment">그리고 검색해보겠습니다.</h3></section><section><p>아 참고로, 나중에 웹 개발을 할 때엔</p><p>database라는 녀석을 쓸텐데요,</p><h3 class="fragment">지금은 그 녀석을 직접 만드신다고 생각하면 됩니다.</h3></section><section><h3>csv 파일이란?</h3><p>아래와 같이 생긴 녀석을 말합니다</p><pre><code>name,email,school
+김연세,yonsei@yonsei.ac.kr,yonsei
+박고대,korea@korea.ac.kr,korea</code></pre></section><section><h3>즉,<span class="text-info">comma(,)등 구분기호로 열이 구분된 파일입니다.</span></h3><p>엑셀 파일도 일종의 csv라고 보시면 됩니다.</p><p>(제한적이지만 xls $\leftrightarrow$ csv 상호 변환도 가능하죠)</p></section><section><p>자 오늘도 <a href='https://hyperdev.com'>여기</a>를 이용합시다</p></section><section data-background-image="http://i.imgur.com/muvclbK.png" data-background-size="90%"></section><section data-background-image="http://i.imgur.com/CGTxIGz.png" data-background-size="90%"><h3><span class="text-info">이렇게 아무렇게나 적으세요(형식에 맞춰서)</span></h3></section><section><h3>그다음 아래와같은 코드를 입력합니다.</h3><p class="text-muted">server.js</p><pre><code>var fs = require('fs')
+var server = require('http').createServer 
+server( (req,res) => {
+  var data = fs.readFileSync('me.csv')
+  res.write(data)
+  res.end()
+}).listen(process.env.PORT, () => console.log('good'))</code></pre></section><section><p>그리고 show live 버튼을 클릭해보세요,</p><h3 class="fragment">우리가 입력했던 csv파일이 그대로 나오나요?</h3></section><section><p>우리가 무슨짓을 했기에 파일을 읽을 수 있었던거죠?</p><p class="fragment">바로 fs라는 놈 때문입니다.</p><p class="fragment">fs는 node에서 기본적으로 제공하는 페키지로,</p><h3 class="fragment">file system의 약자이며, 시스템 파일을 간편하게 읽게 해줍니다.</h3><p class="fragment">(이렇게 기존의 기능을 간편한 인터페이스로 이용할 수 있게 해주는 함수를 wrapper(감싸는 아이)라고 합니다,이건 몰라도 좋아요) </p></section><section><p>그러면 fs의 사용법부터 짚고 넘어갑시다.</p><h3>async manner</h3><pre><code>fs.readFile('me.csv', function(err,data) {
+  console.log(data)
+})</code></pre><h3>sync manner</h3><pre><code>var data = fs.readFileSync('me.csv')
+console.log(data)</code></pre></section><section><p>async,sync가 무엇인지 모르겠는 분은</p><p><a href='https://gist.github.com/robbieisking/ea00bc1d2e4c8dd39df838c7207a7988'>제가 쓴 글</a>을 참고하세요</p><p>물론 지금부터 간단히 설명하긴 하겠습니다.</p><p>사실 이 둘의 차이를 이해하는 것이 node의 시작이며</p><h3 class="fragment">그리고 전부이기도 합니다</h3></section><section><p>복잡한 내용은 잠시 잊고, 하나만 집중합시다.</p><h3 class="fragment">바로 <span class="text-info">실행순서 입니다</span></h3></section><section><p>우선 아래와 같은 코드를 입력하고 show live를 눌러봅시다</p><p class="text-muted">server.js</p><pre> <code>var fs = require('fs')
+var server = require('http').createServer 
+server( (req,res) => {
+  var data = fs.readFileSync('me.csv')
+  res.write(data)
+  res.end()
+}).listen(process.env.PORT, () => console.log('good'))</code></pre><p>사실 아까 코드랑 똑같은거에요 ㅋㅋㅋ 잘 작동했었죠?</p></section><section><p>이번엔 아래와 같은 코드를 입력해볼게요</p><p class="text-muted">server.js</p><pre><code>var fs = require('fs')
+var mydata
+var server = require('http').createServer
+server( (req,res) => {
+  fs.readfile('me.csv', function(err,data) {
+    mydata = data
+  })
+  res.write(mydata)
+  res.end()
+
+}).listen(process.env.PORT, () => console.log('good'))</code></pre><p>자, 이제 어떻게 되던가요?</p></section><section><p>아까와 같이 my.csv가 출력되길 기대했었는데</p><p>아무것도 안나왔죠??</p><p class="text-danger">왜 그럴까요?</p><p class="text-info">바로, async와 sync의 실행순서가 다르기 때문입니다</p></section><section><p>아까 코드에 주석을 달아보겠습니다. <p class="text-muted">server.js</p><pre><code> /*번호는 실행순서 */
+var fs = require('fs') 
+var mydata 
+var server = require('http').createServer 
+server( (req,res) => {
+  fs.readfile('me.csv', function(err,data) {
+    mydata = data //순서 2 or 3 
+  })
+  res.write(mydata) //순서 1
+  res.end() // 순서 2 or 3
+
+}).listen(process.env.PORT, () => console.log('good'))
+</code></pre></p><p>왜 위에 쓴 코드가 먼저 실행이 안될까요?</p></section><section><p>그 이유는 </p><code>function(err,data) {...}</code><p>이놈이 callback function이기 때문입니다.</p><p class="fragment">점점 더 미궁에 빠져들죠 ㅋㅋ?</p><p class="fragment">이유를 알려준다더니 점점 이해할 수 없는 말만 들립니다 ㅋㅋㅋ</p></section><section data-background-image="https://camo.githubusercontent.com/f0e46a0534794344c859cfb2a156c9d37ebb304e/687474703a2f2f692e696d6775722e636f6d2f415a51757a586a2e706e67" data-background-size="60%"></section><section><p>앞의 그림은 멕도널드입니다.</p><p>sync 방식으로 일하는 분은 </p><ul><li>혼자서 음식하고 주문을 다 받습니다</li><li>그래서 요리가 끝나기 전엔, 다음 주문을 못받습니다</li></ul></section><section><p>async 방식으로 일하시는 분은</p><ul><li>주문 받는 분과, 요리하는 분이 다릅니다</li><li>따라서 요리 하는 중에도 주문을 계속 받을 수 있습니다.</li></ul><p class="text-info">우리는 주문을 계속 받기 위해서 async방식으로 코드를 짭니다.        </p><p class="text-danger">대신, 무슨 요리가 먼저 나올지는 예측하기 힘들어집니다.</p></section><section><p>자 다시, csv파일을 불러올 수는 있었지만</p><p>아직 파일에 뭘 추가할 수도 없고,</p><p>검색도 할 수 없었죠?</p></section><section><p>일단 파일에 뭘 추가해봅시다.</p><h3>sync manner</h3><pre><code>var fs = require('fs')
+var server = require('http').createServer
+server( (req,res) => {
+   var data = fs.readFileSync('my.csv')
+   data += '\n호우,01022223333,how@real.com'
+   fs.writeFileSync('my.csv',data)
+   res.write(fs.readFileSync('my.csv'))
+   res.end()
+
+}).listen(process.env.PORT, () => console.log('good'))</code></pre></section><section><p>헐.... hyperdev 후진것;;; 쓰기를 막아놨네요</p><p>c9.io로 갈아탑시다.</p></section><section data-background-image="http://i.imgur.com/d71uCCU.png" data-background-size="90%"></section><section><p>첫번째 시간에 c9.io 활용해봤죠? 거기서 이제 node로 만들어 주시면 됩니다.</p></section><section data-background-image="http://i.imgur.com/tSVo897.png" data-background-size="90%"></section><section><p>여기도 server.js가 있고, run을 누르면 서버가 실행됩니다.</p><p>지금은 채팅앱이 기본적으로 올려져 있네요</p><p>run을 누르면 어떻게 될까요</p></section><section data-background-image="http://i.imgur.com/sqJYsor.png" data-background-size="90%"></section><section><p>하단에 보시면 your code is running 어쩌구가 있을겁니다</p><p>그 주소 그대로 브라우저에 입력하시면 여러분 app이 실행됩니다</p><p>기본앱 훌륭하죠? 여러분도 만들 수 있습니다(조만간)</p></section><section><p>일단 지금은 다 지우고,</p><p class="text-muted">server.js</p><pre><code>var fs = require('fs')
+var server = require('http').createServer
+server( (req,res) => {
+   var data = fs.readFileSync('my.csv')
+   data += '\n호우,01022223333,how@real.com'
+   fs.writeFileSync('my.csv',data)
+   res.write(fs.readFileSync('my.csv'))
+   res.end()
+
+}).listen(process.env.PORT, () => console.log('good'))</code></pre><p>이거 입력해서 실행해봅시다(아,my.csv 파일은 당연히 만들어 주셔야 합니다)</p></section><section data-background-image="http://i.imgur.com/z7M95Ez.png" data-background-size="90%"></section><section><p>이렇게 떴죠? 축하합니다, 방금 csv 파일에 뭐 하나를 추가하셨네요.(글자 깨지는건 한글이라 그렇습니다, 나중에 고쳐요)</p><p>이제 async 방식으로도 한번 써봅시다 </p><p class="text-muted">server.js</p><pre><code>var fs = require('fs')
+var server = require('http').createServer
+server( (req,res) => {
+    var data = fs.readFile('my.csv', (err,data) => {
+    var addLine = data + '\nhow,01022222222,oasfd@real.com'
+    fs.writeFile('my.csv',addLine, err => {
+        if (err)
+          throw err
+        res.write(addLine)
+        res.end()   
+    })
+
+ })
+}).listen(process.env.PORT, () => console.log('good'))</code></pre></section><section><p>역시 정상적으로 작동함을 알 수 있습니다.</p><p>async 코드를 자세히 보면, server 안에 readFile,</p><p>readFile 안에 writeFile 이런식으로 썼죠?</p><p class="text-info">이렇게 callback안에 다음 동작을 써주지 않으면 순서대로 동작하지 않기 때문에 예상한 대로 실행이 안됩니다.</p></section><section><p>여기서 끝내면 심심하죠? 이제 검색 기능을 추가해 봅시다.</p><p>일단, 이름을 가지고 검색을 구현해봅시다.</p><p>검색 입력은 url로 받을 것입니다.</p></section><section><p>자 그런데 우리는 지금 csv파일을 의미없이 통으로 읽어왔습니다.</p><p>csv파일은 사실 의미가 있는 파일입니다. 행과 열로 구분되어있죠,</p><p>우리도 한번 구분해줍시다.</p><pre><code>var fs = require('fs')
+var server = require('http').createServer
+server( (req,res) => {
+    var data = fs.readFileSync('my.csv')
+    data = String(data).split('\n') // 행으로 구분함
+    data.map( item => {return item.split(',')}) // 열을 구분함
+    res.write(data[1][0]) // 2행 1열 출력 (저의 경우 me)
+    res.end()
+}).listen(process.env.PORT, ()=>console.log('good'))</code></pre></section><section><p>어때요? 제대로 정보를 읽어왔죠?</p><p>여기서 이해해야할 method로는 split, map이 있겠네요.</p><p>이건 mozilla 사이트 들어가서 직접 검색해보세요(다떠먹여주진 않습니다)</p></section><section><p>자, 이제 검색을 구현할 시간입니다.</p><pre><code>var fs = require('fs')
+var server = require('http').createServer
+server( (req,res) => {
+  var data = fs.readFileSync('my.csv')
+  data = String(data).split('\n') // 행으로 구분함
+  data = data.map( item => {return item.split(',')}) // 열을 구분함
+
+  var query = req.url.replace('/','')
+  data = data.filter( item => {return item[0].match(query)}) // 1열에 있는 이름에 대해 검색함
+  //filter 작동원리: return값이 참이면 item을 남기고, false이면 item을 죽인다. 말 그대로 필터
+  res.write(String(data)) // 검색된 값 출력
+  res.end()
+}).listen(process.env.PORT, ()=>console.log('good'))</code></pre></section><section><p> 브라우저에 https://어쩌구저쩌구.c9users.io/검색어 를 입력하면</p><p> 검색어와 동일한 이름을 가진 행만 출력하는걸 확인하셨나요?</p><p>filter에 대해서도 자세히 알아보세요. 어떻게 동작하는진 주석에 대충 적어놨습니다.</p></section><section> <h3>숙제</h3><p>async manner로 위의 검색을 똑같이 구현해보기</p><p>다음시간엔 template engine을 직접 만들어보겠습니다.</p></section><section><p>감사합니다.</p></section></div></div><script src="/reveal/lib/js/head.min.js"></script><script src="/reveal/js/reveal.js"></script><script src="/reveal_config.js"></script></body></html>
