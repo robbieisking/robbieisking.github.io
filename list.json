@@ -41,7 +41,11 @@
 
            {"href":"https://robbieisking.github.io/presentation/first.html", "target":"_blank" , "subtitle":" 서버란? + 가장 간단한 서버 만들기"},
 
-           {"href":"https://robbieisking.github.io/presentation/second.html", "target":"_blank" , "subtitle":"regex로 url 처리하기"}
+           {"href":"https://robbieisking.github.io/presentation/second.html", "target":"_blank" , "subtitle":"regex로 url 처리하기"},
+
+            {"href":"https://robbieisking.github.io/presentation/third.html", "target":"_blank" , "subtitle":"csv파일 읽고,쓰고, 검색하기"}
+
+
   ]
 }
  ]
