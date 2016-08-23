@@ -188,21 +188,22 @@ html
             p 정규식 설명(예시 위주)
             pre
               code.
-                    '{{ hohoho }}'.match(/\{\{\s*(\w*)\s*\}\}/)
-                      //output: ['{{ hohoho }}','hohoho']
-                    '{{id}}'.match(/\{\{\s*(\w*)\s*\}\}/)
-                      //output: ['{{id}}','id']
-                    data={id:'me'}
-                    data['id']
-                      //output:'me'
-                    '{{id}}'.replace(/\{\{\s*(\w*)\s*\}\}/,(a,b)=>{return b})
-                      //output:'id'
-                      //설명: 원래 문자열을 그룹으로 지정해둔 id로 바꿔버림,
-                      //그룹이란? () 모양으로 감싼 것. 정규식에서 패턴을 기억하기 위해 사용
-                    '{{id}}'.replace(/\{\{\s*(\w*)\s*\}\}/,(a,b)=>{return data[b]})
-                      //output: 'me'
-                      //그룹 설정된 패턴(id)가 data[b]의 b에 들어가서 data['id']와 같은 표현이 됨.
-                      //data['id']는 'me'이므로 'me'로 바뀜.
+                var reg = /\{\{\s*(\w*)\s*\}\}/
+                '{{ hohoho }}'.match(reg)
+                  //output: ['{{ hohoho }}','hohoho']
+                '{{id}}'.match(reg)
+                  //output: ['{{id}}','id']
+                data={id:'me'}
+                data['id']
+                  //output:'me'
+                '{{id}}'.replace(reg,(a,b)=>{return b})
+                  //output:'id'
+                  //설명: 원래 문자열을 그룹으로 지정해둔 id로 바꿔버림,
+                  //그룹이란? () 모양으로 감싼 것. 정규식에서 패턴을 기억하기 위해 사용
+                '{{id}}'.replace(reg,(a,b)=>{return data[b]})
+                  //output: 'me'
+                  //그룹 설정된 패턴(id)가 data[b]의 b에 들어가서 data['id']와 같은 표현이 됨.
+                  //data['id']는 'me'이므로 'me'로 바뀜.
         section
           p 그리고 나서 run을 눌러봅시다, 어떤가요?
           p 아래와 같이 표시되나요?
