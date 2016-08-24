@@ -50,7 +50,16 @@
 
   ]
 }
+,
+{
+  "title":"특별판",
 
+  "contents": [
+
+           {"href":"https://robbieisking.github.io/presentation/special_seidex.html", "target":"_blank" , "subtitle":"세덱스 만들기(매우 허접한버전)"}
+
+  ]
+}
 
 
 ]
