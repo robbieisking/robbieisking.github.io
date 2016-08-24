@@ -50,5 +50,12 @@
 
 
   ]
+},
+
+{ "title:"special",
+  "contents": [
+         {"href":"https://robbieisking.github.io/presentation/special_seidex.html", "target":"_blank" , "subtitle":"세덱스 만들어보기(매우 허접하게)"}
+
+      ]
 }
  ]
