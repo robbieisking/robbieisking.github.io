@@ -1,0 +1,113 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"><link rel="stylesheet" href="/reveal/css/reveal.css"><link rel="stylesheet" href="/reveal/css/theme/white.css"><link rel="stylesheet" href="/reveal/lib/css/zenburn.css"><script src="https://code.jquery.com/jquery-3.1.0.min.js"></script><script>$(document).ready( function () {
+  $('dl.directory dd').addClass('text-muted')
+  })</script><style>table {
+  width:70%;
+  height:70%;
+}</style></head><body><div class="reveal"><div class="slides"><section><h1>special: seidex만들기(매우 허접한 버전)</h1></section><section><p>졸게의 명물, 세덱스. 이걸 서비스로 만들어볼 수 있을까요?</p><p>우선 우리가 배운 내용을 바탕으로 아주 시늉만 내 봅시다.</p></section><section><p>우선 어떻게 동작할지 정의하는게 우선입니다.</p><p>저는 이렇게 만들기로 했어요</p><div class="jumbotron"><code>url: /add/{id},{user_id},{stock_id(kosdaq)}</code><p>이렇게 요청하면, 오늘 날짜의 주식 가격이 저장된다.</p><p>일단 이렇게만 구현해봅시다.</p></div><p class="text-muted fragment">참고로 url에 add등 서버에 행동을 지시하는 단어가 들어가는 것은 바람직하지 않습니다(검색어:RESTful). 오늘은 오로지 편의를 위해 이렇게 설계하도록 하겠습니다.</p></section><section><p>위의 기능을 구현하기 위해서는 아래와 같은 요소가 필요합니다</p><dl><dt>필요한 요소</dt><dd>정보를 저장할 공간(csv) 및 저장공간을 관리하는 도구</dd><dd>오늘의 주식 정보를 긁어오는 놈(crawler)</dd></dl></section><section><p>우선 저장공간을 만들어봅시다.</p><p>c9.io에 db.csv라는 파일을 만들어주세요.</p><img data-src="http://i.imgur.com/cwxR9EG.png"></section><section><p>그 다음, database.js라는 파일을 만들고 아래 코드를 복붙해주세요</p><p class="text-muted">이 코드는 일단 이해하지 맙시다. 제가 만들긴 했는데 너무 허접해서리... 어차피 나중에 잘 만들어진 db 도구를 쓰게될 것 입니다.</p><pre><code>'use strict'
+const fs = require('fs')
+
+class Database {
+  constructor() {
+    this.db = String(fs.readFileSync('db.csv')).split('\n').map( row => {return row.split(',')})
+  }
+  readAll() {
+    return this.db
+  }
+  addLine(line){
+    this.db.push(line.split(','))
+    fs.writeFile('db.csv',this.stringify(this.db), (err) => {
+      if (err) throw err
+      return 1
+    })
+    return this.db
+  }
+  findByUserId(user_id){
+    return this.db.filter( row => {
+      if (typeof row[1] !== 'undefined')
+        return row[1].match(user_id)
+      else
+        return null})
+  }
+  deleteById(id){
+    this.db = this.db.filter( row => {return !row[0].match(id)})
+
+    fs.writeFile('db.csv',this.stringify(this.db), (err) => {
+      if (err) throw err
+      return 1
+    })
+    return this.db
+  }
+
+  stringify(db) {
+      var stringDb = ''
+      db.reduce( (prev,next) => {return prev.concat(['\n'].concat(next))}) // 쫙 펼치기 위해. \n은 줄구분
+              .map ( item => {
+                if (item !='\n')
+                  stringDb+=(item+',')
+                else
+                  stringDb+=item
+              })
+      stringDb = stringDb.replace(/(,$)|(,\n)/g,'\n') // 뒤에있는 , 자르기 위해
+      return stringDb
+    }
+}
+
+module.exports = new Database()</code></pre></section><section><p>이제 server.js에 아래와 같이 입력해봅시다.</p><pre><code>'use strict'
+const db = require('./database')
+const request = require('request')
+
+function app (req,res){
+
+  if (req.url.match('\/add\/')){
+      let addQuery = req.url.match(/\/add\/(.*)$/)[1].split(',') //이게 어떻게 저장되는지 꼭 확인해보세요
+      let companyId = addQuery[2] //두번째 == 종목코드
+      /* api를 활용한 간단한 crawler(라고 부르긴 창피함) */
+      request(`https://www.google.com/finance/info?q=KOSDAQ:${companyId}`,(err,response,body)=>{
+          /* body도 원래 어떻게 생겼는지 꼭 확인해보세요 */
+          let data = JSON.parse(body.replace('//',''))
+          db.addLine(`${addQuery[0]},${addQuery[1]},${addQuery[2]},${data[0]['l'].replace(',','')}`)
+          res.write(db.stringify(db.readAll())) // res.write는 문자열만 입력받기때문에 변환해준다.
+          res.end()
+      })
+  }
+  else {
+      // add라는 url 요청이 없다면 그냥 있는거만 보여주자
+      res.write(db.stringify(db.readAll()))
+      res.end()
+  }
+}
+
+require('http').createServer(app)
+               .listen(process.env.PORT, () => console.log(`well cooked in ${process.env.PORT}`))</code></pre></section><section><p>잠깐, 위에 request라는 새로운 패키지를 사용했네요.</p><p>c9.io 아래에 있는 bash쉘에 아래와 같은 명령어를 입력해주세요</p><p><code>npm install request</code></p><p>위 명령어는 앞으로 node 페키지를 설치할 때에 자주 사용할 것 입니다.</p></section><section><p>requset로 우리는 간단하게 crawler를 구현한 것 입니다.</p><p>request는 아래와 같이 동작합니다</p><pre><code>request(url,(error,response,data) => {
+  if (error)
+    throw error
+  console.log(data) // url으로 요청보낸 결과값을 출력
+})</code></pre></section><section><p>그리고 제가 만든 database.js의 인터페이스도 간단히 소개하겠습니다</p><img data-src="http://i.imgur.com/nJXenLf.png"></section><section><p>자 이제 한번 이용해볼까요?</p><p>아래와 같이 입력해보세요</p><code>{여러분의 c9.io 주소}/add/1,myname,049180</code><p class="text-muted">049180은 셀루메드(개잡주 ㅋㅋㅋ)의 종목 코드입니다</p></section><section><p>출력이 제대로 되나요?</p><p>여러분은 방금, google에서 현재가 정보를 읽어 우리 csv에 저장했습니다.</p></section><section><p>이제 검색이 되도록 만들어볼까요?</p><p>이제 아래와 같이 작동하게 만들겠습니다</p><code>{주소}/find/{user_id}</code><p>user_id를 url에 입력하면 해당하는 인물만 나오는 것이지요.</p></section><section><p>저대로 행동하도로 만들어 봅시다!</p><p class="text-muted">코드가 전부 바뀐게 아닙니다. 추가만 해주세요</p><pre><code>'use strict'
+const db = require('./database')
+const request = require('request')
+
+function app (req,res){
+
+  if (req.url.match('/add/')){
+      let addQuery = req.url.match(/\/add\/(.*)$/)[1].split(',')
+      let companyId = addQuery[2]
+      request(`https://www.google.com/finance/info?q=KOSDAQ:${companyId}`,(err,response,body)=>{
+          let data = JSON.parse(body.replace('//',''))
+          db.addLine(`${addQuery[0]},${addQuery[1]},${addQuery[2]},${data[0]['l'].replace(',','')}`)
+          res.write(db.stringify(db.readAll()))
+          res.end()
+      })
+  } /*여기만 바뀜*/
+  else if (req.url.match('/find/')){
+      let findQuery = req.url.match(/\/find\/(.*)$/)[1]
+      res.write(db.stringify(db.findByUserId(findQuery)))
+      res.end()
+  } /*여기만 바뀜*/
+  else {
+      res.write(db.stringify(db.readAll()))
+      res.end()
+  }
+}
+
+require('http').createServer(app)
+               .listen(process.env.PORT, () => console.log(`well cooked in ${process.env.PORT}`))</code></pre></section><section><p>작동해보셨나요? 검색이 되나요?</p><p>훌륭합니다. 아직 아주 못생기고, 기능도 얼마 없지만, 이제 세덱스를 만들 기초 체력을 닦은 것 입니다.</p></section><section><p>사실 세덱스를 제대로 구현하려면 아래와 같은 기능도 있어야 할 것입니다.</p><dl><dt>세덱스 예상 기능</dt><dd>매일 종가를 새로 갱신한다(예약작업)</dd><dd>누적 데이터를 바탕으로 여러가지 그래프를 그려준다(시각화)</dd><dd>유저가 직접 팔기 버튼을 눌러 손절,익절인지 판단해준다</dd><dd>...etc...</dd></dl></section><section><p>우리가 지금은 이렇게 허접하게 구현해봤지만, 사실 핵심적인 내용은 거의 다 다룬것입니다.</p><p>고급스러운 기능을 추가하더라도 위에서 사용한 방식은 유효할 것 입니다.</p><p class="text-muted">다만 저번시간에 말햇듯 express와 csv보다 훨씬 근사한 database를 사용할거에요.</p></section><section><p>감사합니다.</p></section></div></div></body><script src="/reveal/lib/js/head.min.js"></script><script src="/reveal/js/reveal.js"></script><script src="/reveal_config.js"></script></html>

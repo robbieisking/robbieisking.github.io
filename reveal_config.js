@@ -1,6 +1,9 @@
 Reveal.initialize(
 
   {
+    minScale:0.2,
+    maxScale:1,
+
     previewLinks:true,
     slideNumber:true,
     history:true,
