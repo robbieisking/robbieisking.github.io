@@ -47,8 +47,6 @@
 
            {"href":"https://robbieisking.github.io/presentation/forth.html", "target":"_blank" , "subtitle":"template engine 직접 만들기"}
 
-
-
   ]
 },
 
@@ -56,6 +54,6 @@
   "contents": [
          {"href":"https://robbieisking.github.io/presentation/special_seidex.html", "target":"_blank" , "subtitle":"세덱스 만들어보기(매우 허접하게)"}
       ]
-},
+}
 
 ]
