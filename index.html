@@ -11,27 +11,13 @@
   <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.js'></script>
   <link rel='stylesheet' type='text/css' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
   <link rel='stylesheet' type='text/css' href=https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css>
+  
+  <link rel='stylesheet' type='text/css' href='/static/main.css'>
 
   <meta charset='utf-8' name="viewport" content="width=device-width, initial-scale=1.0">
 
 </head>
-<style>
-  .indexes {
-    display:inline-block;
-  }
-  .jumbotron {
-   background-color:#ECF3F9
-  }
-  #myflavor {
-   background-color:#DEF2F8
-  }
-    img#robbie{
-        width:10rem;
-        position:absolute;
 
-    }
-
-  </style>
 <body>
   <div class='container'>
     <div class=jumbotron>
@@ -46,7 +32,7 @@
   </div>
   <div class=col-sm-4>
     <div class=jumbotron id=myflavor>
-    <p class='text-center'> 여기는 여기는 내 마음대로 할거임 </p>      
+    <p class='text-center'> 여기는 내 마음대로 할거임 </p>      
 
     </div>
   </div>
@@ -68,34 +54,13 @@
         $('footer #reserved').text(`©${year} 익게이 all right reserved` )
        })
   </script>
-  <script>
-      function myTransf () {
-          d3.select('#robbie').transition().duration(500)
-          .style('top', Math.random()*800 + 'px')
-          .style('left', Math.random()*800 + 'px')
-        
-      }
-      var rob_inside = d3.select('body')
-                            .append('div')
-                            .attr('width','800px')
-                            .attr('height','800px')
-      var rob = rob_inside
-            .append('img')
-            .attr('id','robbie')
-            .attr('src','static/rob.png')
-            .style('top', Math.random()*200 + 'px')
-            .style('left', Math.random()*200 + 'px')
-            
-      setInterval(myTransf,1000)
-      
-      var robClick=0;
-      $('img#robbie').on('click', function() {
-          robClick+=1
-          this.append($('h1').text('왜 날' +robClick +'번' + '클릭함 ㅋㅋㅋ'))
-      })
+  
+<div id='robbie_playground'></div>
+<!--<script src='js/robbie_strolling.js'></script>-->
+    <script type='text/babel' src='/js/rob_stroll.js'></script>
+     
           
       
-  </script>
 </body>
 
 </html>
