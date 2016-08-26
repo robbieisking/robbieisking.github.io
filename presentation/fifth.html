@@ -17,7 +17,9 @@
     color: inherit;
     transition: all .5s;
 }
-
+    dl dt {
+        background-color:aliceblue;
+    }
     </style>
     
 </head>
@@ -48,8 +50,428 @@
                     <h3>웹 서비스가 해결해야하는 문제?</h3>
                     <p class="text-danger stroll">데이터베이스 모델링(Model)</p>
                     <p class="text-danger stroll">url 라우팅,컨트롤(Controller)</p>
-                    <p class="text-danger stroll">결과물(view)</p>
-                    <script >
+                    <p class="text-danger stroll">유저에게 출력해야할 결과물(view)</p>
+                    
+                </section>
+                
+                <section>
+                    <h3> 솔직히 버튼 누르느라 정신이 없었죠?</h3>
+                    <p> 다시 정리 해드리겠습니다.</p>
+                    <ul class='list-group'>
+                        <li class="fragment list-group-item"><h3>controll</h3></li>
+                        <li class="fragment list-group-item"><h3>model</h3></li>
+                        <li class="fragment list-group-item"><h3>view</h3></li>
+                    </ul>
+                  
+                </section>
+                <section>
+                    <p>이제부터 각각 어떤 역할을 하는지, 그리고</p>
+                    <p>express에서 무슨 모습을 하고 있는지 보여드리겠습니다</p>
+                    <p class="text-danger">단, 모습은 그냥 참고사항이지 지금 단계에선 이해하실 필요 없습니다</p>
+                </section>
+                <section>
+                   <section>
+                    <h3> controller</h3>
+                    <p class='fragment text-info'> 컨트롤러는 사용자의 종입니다.</p>
+                    <p class=fragment> 사용자가 url이나 각종 http request로 명령을 내리면, 무슨짓을 해야할지 미리 기억하고 있다가 그대로 수행합니다.</p>
+                    <p class=fragment> 앞서 우리가 배웠던 url 처리가 바로 컨트롤러가 하는 역할입니다.</p>
+                    <p class='text-muted fragment'>(사실 이 부분에서 controller냐 router냐 구분하기도 하는데, 철학의 문제이기 때문에 그냥 뭉뚱그려서 controller라고 합시다.)</p>
+                    <a href=# class='navigate-down enabled fragment'>
+                        아래로
+                    </a>
+                    </section>
+                    <section>
+                        <h3> express에서 controller의 모습</h3>
+                        <pre>
+                           <code>
+var express = require('express')
+var app = express()
+
+function controller (req,res){
+   res.send('hello')
+}
+app.get('/', controller) 
+app.listen(process.env.PORT, () => {console.log(`port activated at ${process.env.PORT}`)})    
+                           </code>
+                       </pre>
+                        <a href=# class='navigate-down fragment'>
+                            아래로
+                        </a>
+                       
+                    </section>
+                    <section>
+                        <h3> express에서 controller의 모습(발전된 버전)</h3>
+                        <p class="text-muted">app.js</p>
+                        <pre><code>
+/*...some codes ...*/
+var postController = require('./controllers/post')
+app.use('/api/posts/',postController) // or postRouter
+/*... */
+                       
+                        </code></pre>
+                        <p class="text-muted">/controllers/post.js</p>
+                        <pre><code>
+var router = require('express').Router()
+router.route('/')
+      .get( someCallbacks)
+/*... */
+                        </code></pre>
+                        
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h3> model</h3>
+                        <p class='fragment text-info'> 모델은, 슈퍼모델이 아니라 자료 구조입니다</p>
+                        <p class=fragment> 우리의 서비스가 어떻게 자료를 저장하고 꺼낼 것인지 말해줍니다</p>
+                        <p class=fragment> 앞에서 csv파일 형식으로 저장한 것이 바로 모델입니다.</p>
+                         <a href=# class='navigate-down fragment'>
+                            아래로
+                        </a>
+                    </section>
+                    <section>
+                        <h3> express에서 model의 모습(mongodb)</h3>
+                        <p class='text-muted'>model.js</p>
+                        <p class='text-muted'>이해 ㄴㄴ;;;</p>
+
+                        <pre>
+                           <code data-noescape data-notrim>
+var mongoose = require('mongoose')
+var schema = new mongoose.createSchema( {
+   username: String,
+   content: String
+})
+var Post = mongoose.model('Post',schema)
+model.exports = Post
+                            </code>
+                        </pre>
+                    </section>
+                </section>
+                <section>
+                   <section>
+                    <h3>view</h3>
+                    <p>저번에 template engine 직접 만들어봤죠?</p>
+                    <p>express에서는 ejs 또는 pug(jade)라는 아이가 있습니다.</p>
+                    <a href=# class'naviagte-down fragment'>아래로</a>
+                    </section>
+                    <section>
+                        <h3> view template의 모습(pug,jade)</h3>
+                        <div class=row>
+                           <div class=col-lg-6>
+                           <p> pug code</p>
+                            <pre><code>
+doctype html
+   html
+       head
+           meta(charset='utf-8')
+       body
+           each val in ['hi','hello','good evening']
+               li=val
+       
+                        </code></pre>
+    </div>
+                   <div class=col-lg-6>
+                    <p>아래 html태그와 동치</p>
+                    <pre>
+                       <code data-escape data-notrim>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;li&gt;hi&lt;/li&gt;
+    &lt;li&gt;hello&lt;/li&gt;
+    &lt;li&gt;good evening&lt;/li&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+                        
+                    </code></pre>
+    </div>
+                        </div>
+                    </section>
+                </section>
+                <section>
+                    <p> express가 크게 3가지 문제를 해결해주는 아이임을 알았습니다. </p>
+                    <p>자 이제 직접 코딩하면서 그게 무슨 뜻인지 알아볼게요,</p>
+                    <p class=text-muted>단 오늘은 model에 대해서 다루지는 않을 것 입니다</p>
+                </section>
+                
+                <section>
+                    <p> 자, 우선 다시 우리의 <a href='c9.io'>c9.io</a> 를 이용해봅시다.</p>  
+                </section>
+                
+                <section>
+                    <p>우선 어떤 일을 하는 아이를 만들지 생각해봅시다.</p>
+                    <p>저는 이 앱이 아래와 같은 일을 했으면 좋겠네요.</p>
+                    <dl >
+                    <dt >url:'/'</dt>
+                        <dd >home.pug 템플릿 페이지를 보여준다</dd>
+                    <dt >url:'/calculator/{계산식}'</dt>
+                        <dd >calculator.pug에서 url로 요청한 식을 계산하여 보여준다</dd>
+                    <dt >url:'/daum/'</dt>
+                        <dd>다음의 주요 뉴스를 보여준다</dd>
+                    </dl>
+                    
+                </section>
+                <section>
+                   <section>
+                    <h3> url: '/'</h3>
+                    <p>pug라는 엔진을 써야하기 때문에,</p>
+                    <p> 반드시 bash shell에서 <code>npm install pug --save</code> 입력!!</p>
+                    <p class='text-muted'>server.js</p>
+                    <pre><code>
+'use strict'
+const express =require('express')
+const app = express() // express의 모듈을 app이라는 객체에 찍어냄
+const path = require('path') // directory path를 쉽게 쓰게 해줌
+
+app.set('view engine','pug') // template engine => pug
+app.set('views',path.join(__dirname,'client')) 
+// template file이 있는 위치를 지정해줌
+//__dirname:현재 위치. path.join(__dirname,'client') => ./client
+
+function homeController(req,res) {
+      res.render('home') //render:  views폴더 안에 있는 home.pug라는 파일을 찾아서 보내줌
+}
+app.use('/',homeController) //url: '/'로 요청이 오면 homeController라는 애가 처리하도록 함
+
+app.listen(process.env.PORT,()=>console.log('good'))
+
+                    </code></pre>
+                    <a href=# class'naviagte-down fragment'>아래로</a>
+                    </section>
+                    <section>
+                       <h3> url: '/'</h3>
+                       <p> view template를 만져보자</p>
+                       <div class="row">
+                           <div class="col-sm-6">
+                              <p class="text-muted">client/layout.pug</p>
+                               <pre><code>
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        meta(name='viewpoint' content='width=device-width')
+        link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    body
+        block content
+                               </code></pre>
+                           </div>
+                           <div class="col-sm-6">
+                            <p class="text-muted">client/home.pug</p>
+
+                               <pre><code>
+extends layout
+//-layout.pug의 content부터 시작함
+block content 
+    //-위의 content를 이어받는다는 선언
+    div.container 
+        //-검색: bootstrap container
+        div.jumbotron
+            //-검색: bootstrap jumbotron
+            h1.text-center hello 
+            //-검색: bootstrap typo
+            p.text-center this is our homepage
+
+                                   
+                               </code></pre>
+                           </div>
+                       </div>
+                        
+                    </section>
+                    <section data-background-image='http://i.imgur.com/6WKmMg0.png'>
+                        <h3>이제 run을 클릭해보세요!</h3>
+                        <p class='text-info'>배경과 같은 이미지가 보이나요??</p>
+                    </section>
+                </section>
+                
+                <section>
+                    <section>
+                        <h3>url:'/calculator/'</h3>
+                        <p class="text-muted">server.js(아까전 코드에서 조금 추가함)</p>
+                        <pre><code>
+'use strict'
+const express =require('express')
+const app = express()
+const path = require('path')
+
+app.set('view engine','pug')
+app.set('views',path.join(__dirname,'client'))
+function homeController(req,res) {
+      res.render('home')
+}
+function calculatorController(req,res){
+    let equation = req.params.equation
+    // 밑에 app.get('/calculator/:equation')이라 되어있는데,
+    // express에서 url에 :{param} 표시는 : 뒤에 들어가는 url을 
+    // req.params.{param}에 저장한다는 뜻이다.(단, app.use()에서는 통하지 않는다)
+    let result
+    try
+    {
+        result = eval(equation) 
+    }
+    catch(err)
+    { 
+        result = 'invalid equation' 
+    }
+    res.render('calculator',{result,equation})
+    // ecma5만 하신 분들을 위해 당혹스러울까봐 설명드리면, 
+    // {result,equation} => {result:result, equation:equation} 의 단축형이다.(ecma 6)
+
+}
+app.get('/',homeController)
+app.get('/calculator/:equation',calculatorController)
+
+app.listen(process.env.PORT,()=>console.log('good'))
+                        </code></pre>
+                        <a href=# class'naviagte-down fragment'>아래로</a>
+
+                    </section>
+                    <section>
+                        <h3>url:'/calculator/'</h3>
+                        <p class="text-muted">client/calculator.png</p>
+                        <pre><code>
+extends layout
+block content
+    h1 계산결과 
+    dl.row
+        dt.col-sm-3.
+            equation: #{ equation }
+        //- #{..} 안에 res.render('blabla',{...})의 {}에 나오는 데이터를 넣는다
+        //- 우리 예제에선 {result,equation} 이였으므로 equation이 들어간다.
+        dd.col-sm-7.
+            result: #{ result }
+        //- dd태그, col-sm-*의 의미 등은 bootstrap이나 html을 검색하면 찾을 수 있으니 제발 찾아보길 !
+                        </code></pre>
+                        <a href=# class'naviagte-down fragment'>아래로</a>
+
+                    </section>
+                    <section data-background-image='http://i.imgur.com/3rLbz9E.png' data-background-size='90%'>
+                        <h3>이렇게 표시되나요?</h3>
+                    </section>
+                </section>
+                
+                <section>
+                    <section>
+                        <h3>url:'/daum/'</h3>
+                        <p class="text-muted">server.js</p>
+                        <p>request,cheerio 패키지를 이용하니, 반드시 bash에 </p>
+                        <p><code>npm install request cheerio --save</code> 입력할것!</p>
+                        <pre><code>
+'use strict'
+const express =require('express')
+const app = express()
+const path = require('path')
+const request = require('request')
+const cheerio = require('cheerio')
+
+app.set('view engine','pug')
+app.set('views',path.join(__dirname,'client'))
+function homeController(req,res) {
+      res.render('home')
+}
+function calculatorController(req,res){
+    let equation = req.params.equation
+    let result
+    try
+    {
+        result = eval(equation) 
+    }
+    catch(err)
+    { 
+        result = 'invalid equation' 
+    }
+    res.render('calculator',{result,equation})
+}
+function daumNews(req,res){
+    request('http://daum.net', (err,response,data) => {
+        let $ = cheerio.load(data) 
+        //cheerio는 jquery처럼 html을 읽어주는 패키지
+        // 즉 여러분이 공부할 것: jquery 이용법, css selector
+        let title = []
+            $('li>a.ellipsis_g').each (function() {title.push($(this).text())})
+            //css selector와 jquery를 공부했다면 이해할 수 있는 식.
+            // 간단히 설명하자면, li tag안에 있는 class이름이 ellipsis_g인 a tag를 모두 선택.
+            // 모두 선택했다면 결과는 행렬 아니겠음? 행렬의 원소마다 각각(each) 안에 있는 함수를 실행시킴.
+            // 함수 안에는 title이라는 행렬에 $(this).text()라는 애를 넣어주고 있음.
+            // 여기서 this는 각각의 원소를 의미, $(this) 는 jquery처럼 읽어오는 것, text() 메서드는 
+            // a tag 안에 있는 text를 읽어오는 것임.
+        let href = []
+            $('li>a.ellipsis_g').each( function(){href.push($(this).attr('href'))})
+        let news =[]
+            title.forEach((val,index) => { news.push({title:title[index], href:href[index]})  })
+            //news = [ {title,href}, ...] 
+        res.render('daum',{news})
+    })
+}
+app.get('/',homeController)
+app.get('/calculator/:equation',calculatorController)
+app.get('/daum',daumNews)
+
+app.listen(process.env.PORT,()=>console.log('good'))
+                        </code></pre>
+                        <a href=# class'naviagte-down fragment'>아래로</a>
+
+                    </section>
+                    <section>
+                        <h3>url:'/daum/'</h3>
+                        <p class="text-muted">client/daum.pug</p>
+                        <pre><code>
+extends layout
+block content
+    style.
+        li:hover {
+            background-color:aliceblue;
+        }
+    h1 다음 주요뉴스
+    ul.list-group
+        each item in news
+            li.list-group-item
+                a(href=item.href) #{item.title}
+    
+                        </code></pre>
+                    </section>
+                    
+                    <section data-background-image='http://i.imgur.com/4zLc4Dw.png' data-background-size='90%'>
+                        <h3>이렇게 보임?</h3>
+                    </section>
+                </section>
+                <section>
+                    <h3>수고하셨어요</h3>
+                    <p>솔직히 이정도 따라왔으면 진짜 고수임</p>
+                    <p>제가 박수를 치고 싶을 정도</p>
+                </section>
+                <section>
+                    <h3>다음시간엔 데이터베이스를 배워보겠습니다</h3>
+                    <p>이거까지 끝나면 정말로 서비스를 개발해볼거에요</p>
+                    <p>연세팅? 발전된 세덱스? 등등등... 다 할 수 있습니다!!!</p>
+                </section>
+                <section>
+                    <p>감사합니다</p>
+                </section>
+                
+           </div>
+                      
+   </div>
+<script src="/reveal/lib/js/head.min.js"></script>
+<script src="/reveal/js/reveal.js"></script>
+<script src="/reveal_config.js"></script>
+   <script>
+
+Reveal.addEventListener( 'fragmentshown', function( event ) {
+    // event.fragment = the fragment DOM element
+    if ($(event.fragment)[0].tagName === 'LI'){
+        $(event.fragment).addClass('list-group-item-success')
+        $(event.fragment).prev().removeClass('list-group-item-success')
+    }
+    
+} );
+
+
+    </script>
+    
+    <script >
                         var trial=0
                         var btn = d3.select('button')
                         function stroll_around() {
@@ -82,41 +504,6 @@
                                 )
                         }
                     </script>
-                </section>
-                
-                <section>
-                    <h3> 솔직히 버튼 누르느라 정신이 없었죠?</h3>
-                    <p> 다시 정리 해드리겠습니다.</p>
-                    <ul class='list-group'>
-                        <li class="fragment list-group-item"><h3>controll</h3></li>
-                        <li class="fragment list-group-item"><h3>model</h3></li>
-                        <li class="fragment list-group-item"><h3>view</h3></li>
-                    </ul>
-                    <script>
-
-
-                    </script>
-                </section>
-           </div>
-                      
-   </div>
-<script src="/reveal/lib/js/head.min.js"></script>
-<script src="/reveal/js/reveal.js"></script>
-<script src="/reveal_config.js"></script>
-   <script>
-
-Reveal.addEventListener( 'fragmentshown', function( event ) {
-    // event.fragment = the fragment DOM element
-    if ($(event.fragment)[0].tagName === 'LI'){
-        $(event.fragment).addClass('list-group-item-success')
-        $(event.fragment).prev().removeClass('list-group-item-success')
-    }
-    
-} );
-
-
-    </script>
-    
 </body>
 
 </html>
