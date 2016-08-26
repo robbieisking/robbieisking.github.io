@@ -53,17 +53,17 @@ class Index extends React.Component {
     let contents = this.props.contents.map ( (content) => {
       if(content.suppliment)
        return (
-        <li ><a href={content.href} target={content.target}> {content.subtitle} </a></li> 
+        <li className='list-group-item'><a href={content.href} target={content.target}> {content.subtitle} </a></li> 
        ) 
       else
         return (
-          <li ><a href={content.href} target={content.target}> {content.subtitle} </a></li> 
+          <li className='list-group-item'><a href={content.href} target={content.target}> {content.subtitle} </a></li> 
          )
       
     })
     return (
       <div className='Index'>
-        <ul>
+        <ul className='list-group'>
         {contents} 
         </ul>
       </div>
