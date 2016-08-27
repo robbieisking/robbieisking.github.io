@@ -49,7 +49,7 @@
 
                     <h3>웹 서비스가 해결해야하는 문제?</h3>
                     <p class="text-danger stroll">데이터베이스 모델링(Model)</p>
-                    <p class="text-danger stroll">url 라우팅,컨트롤(Controler)</p>
+                    <p class="text-danger stroll">url 라우팅,컨트롤(Controller)</p>
                     <p class="text-danger stroll">유저에게 출력해야할 결과물(view)</p>
                     
                 </section>
@@ -71,26 +71,26 @@
                 </section>
                 <section>
                    <section>
-                    <h3> controler</h3>
+                    <h3> controller</h3>
                     <p class='fragment text-info'> 컨트롤러는 사용자의 하인입니다.</p>
                     <p class=fragment> 사용자가 url이나 각종 http request로 명령을 내리면, 무슨짓을 해야할지 미리 기억하고 있다가 그대로 수행합니다.</p>
                     <p class=fragment> 앞서 우리가 배웠던 url 처리가 바로 컨트롤러가 하는 역할입니다.</p>
-                    <p class='text-muted fragment'>(사실 이 부분에서 controler냐 router냐 구분하기도 하는데, 철학의 문제이기 때문에 그냥 뭉뚱그려서 controler라고 합시다.)</p>
+                    <p class='text-muted fragment'>(사실 이 부분에서 controller냐 router냐 구분하기도 하는데, 철학의 문제이기 때문에 그냥 뭉뚱그려서 controller라고 합시다.)</p>
                     <a href=# class='navigate-down enabled fragment'>
                         아래로
                     </a>
                     </section>
                     <section>
-                        <h3> express에서 controler의 모습</h3>
+                        <h3> express에서 controller의 모습</h3>
                         <pre>
                            <code>
 var express = require('express')
 var app = express()
 
-function controler (req,res){
+function controller (req,res){
    res.send('hello')
 }
-app.get('/', controler) 
+app.get('/', controller) 
 app.listen(process.env.PORT, () => {console.log(`port activated at ${process.env.PORT}`)})    
                            </code>
                        </pre>
@@ -100,16 +100,16 @@ app.listen(process.env.PORT, () => {console.log(`port activated at ${process.env
                        
                     </section>
                     <section>
-                        <h3> express에서 controler의 모습(발전된 버전)</h3>
+                        <h3> express에서 controller의 모습(발전된 버전)</h3>
                         <p class="text-muted">app.js</p>
                         <pre><code>
 /*...some codes ...*/
-var postControler = require('./controlers/post')
-app.use('/api/posts/',postControler) // or postRouter
+var postController = require('./controllers/post')
+app.use('/api/posts/',postController) // or postRouter
 /*... */
                        
                         </code></pre>
-                        <p class="text-muted">/controlers/post.js</p>
+                        <p class="text-muted">/controllers/post.js</p>
                         <pre><code>
 var router = require('express').Router()
 router.route('/')
@@ -235,10 +235,10 @@ app.set('views',path.join(__dirname,'client'))
 // template file이 있는 위치를 지정해줌
 //__dirname:현재 위치. path.join(__dirname,'client') => ./client
 
-function homeControler(req,res) {
+function homeController(req,res) {
       res.render('home') //render:  views폴더 안에 있는 home.pug라는 파일을 찾아서 보내줌
 }
-app.use('/',homeControler) //url: '/'로 요청이 오면 homeControler라는 애가 처리하도록 함
+app.use('/',homeController) //url: '/'로 요청이 오면 homeController라는 애가 처리하도록 함
 
 app.listen(process.env.PORT,()=>console.log('good'))
 
@@ -308,10 +308,10 @@ const path = require('path')
 
 app.set('view engine','pug')
 app.set('views',path.join(__dirname,'client'))
-function homeControler(req,res) {
+function homeController(req,res) {
       res.render('home')
 }
-function calculatorControler(req,res){
+function calculatorController(req,res){
     let equation = req.params.equation
     // 밑에 app.get('/calculator/:equation')이라 되어있는데,
     // express에서 url에 '/calculator/:{param}' 표시는 : 뒤에 들어가는 url을 
@@ -330,8 +330,8 @@ function calculatorControler(req,res){
     // {result,equation} => {result:result, equation:equation} 의 단축형이다.(ecma 6)
 
 }
-app.get('/',homeControler)
-app.get('/calculator/:equation',calculatorControler)
+app.get('/',homeController)
+app.get('/calculator/:equation',calculatorController)
 
 app.listen(process.env.PORT,()=>console.log('good'))
                         </code></pre>
@@ -378,10 +378,10 @@ const cheerio = require('cheerio')
 
 app.set('view engine','pug')
 app.set('views',path.join(__dirname,'client'))
-function homeControler(req,res) {
+function homeController(req,res) {
       res.render('home')
 }
-function calculatorControler(req,res){
+function calculatorController(req,res){
     let equation = req.params.equation
     let result
     try
@@ -415,8 +415,8 @@ function daumNews(req,res){
         res.render('daum',{news})
     })
 }
-app.get('/',homeControler)
-app.get('/calculator/:equation',calculatorControler)
+app.get('/',homeController)
+app.get('/calculator/:equation',calculatorController)
 app.get('/daum',daumNews)
 
 app.listen(process.env.PORT,()=>console.log('good'))
