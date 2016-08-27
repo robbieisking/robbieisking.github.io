@@ -63,7 +63,6 @@ firebase.database().ref('/presentation/fifth/').once('value',function(snap){
 })
 */
 firebase.database().ref('/presentation/fifth/').on('child_added', function(data){
-    console.log(data.val())
     $('div.questions').prepend(`<dl><dt>${data.val().id}</dt><dd>${data.val().text}</dd></dl>`)
 })
 
