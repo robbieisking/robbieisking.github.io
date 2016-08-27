@@ -49,7 +49,7 @@ $('form').on('submit', function() {
     $('textarea[name="text"]').val('')
     return false
 })
-
+/*
 firebase.database().ref('/presentation/fifth/').once('value',function(snap){
     var questions = []
     for (var key in snap.val())
@@ -61,6 +61,7 @@ firebase.database().ref('/presentation/fifth/').once('value',function(snap){
         .exit().remove()
 
 })
+*/
 
 firebase.database().ref('/presentation/fifth/').on('child_added', function(data){
     $('div.questions').prepend(`<dl><dt>${data.val().id}</dt><dd>${data.val().text}</dd></dl>`)
