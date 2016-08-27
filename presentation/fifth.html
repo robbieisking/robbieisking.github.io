@@ -49,7 +49,7 @@
 
                     <h3>웹 서비스가 해결해야하는 문제?</h3>
                     <p class="text-danger stroll">데이터베이스 모델링(Model)</p>
-                    <p class="text-danger stroll">url 라우팅,컨트롤(Controller)</p>
+                    <p class="text-danger stroll">url 라우팅,컨트롤(Controler)</p>
                     <p class="text-danger stroll">유저에게 출력해야할 결과물(view)</p>
                     
                 </section>
@@ -104,8 +104,8 @@ app.listen(process.env.PORT, () => {console.log(`port activated at ${process.env
                         <p class="text-muted">app.js</p>
                         <pre><code>
 /*...some codes ...*/
-var postController = require('./controlers/post')
-app.use('/api/posts/',postController) // or postRouter
+var postControler = require('./controlers/post')
+app.use('/api/posts/',postControler) // or postRouter
 /*... */
                        
                         </code></pre>
@@ -235,10 +235,10 @@ app.set('views',path.join(__dirname,'client'))
 // template file이 있는 위치를 지정해줌
 //__dirname:현재 위치. path.join(__dirname,'client') => ./client
 
-function homeController(req,res) {
+function homeControler(req,res) {
       res.render('home') //render:  views폴더 안에 있는 home.pug라는 파일을 찾아서 보내줌
 }
-app.use('/',homeController) //url: '/'로 요청이 오면 homeController라는 애가 처리하도록 함
+app.use('/',homeControler) //url: '/'로 요청이 오면 homeControler라는 애가 처리하도록 함
 
 app.listen(process.env.PORT,()=>console.log('good'))
 
@@ -308,10 +308,10 @@ const path = require('path')
 
 app.set('view engine','pug')
 app.set('views',path.join(__dirname,'client'))
-function homeController(req,res) {
+function homeControler(req,res) {
       res.render('home')
 }
-function calculatorController(req,res){
+function calculatorControler(req,res){
     let equation = req.params.equation
     // 밑에 app.get('/calculator/:equation')이라 되어있는데,
     // express에서 url에 '/calculator/:{param}' 표시는 : 뒤에 들어가는 url을 
@@ -330,8 +330,8 @@ function calculatorController(req,res){
     // {result,equation} => {result:result, equation:equation} 의 단축형이다.(ecma 6)
 
 }
-app.get('/',homeController)
-app.get('/calculator/:equation',calculatorController)
+app.get('/',homeControler)
+app.get('/calculator/:equation',calculatorControler)
 
 app.listen(process.env.PORT,()=>console.log('good'))
                         </code></pre>
@@ -378,10 +378,10 @@ const cheerio = require('cheerio')
 
 app.set('view engine','pug')
 app.set('views',path.join(__dirname,'client'))
-function homeController(req,res) {
+function homeControler(req,res) {
       res.render('home')
 }
-function calculatorController(req,res){
+function calculatorControler(req,res){
     let equation = req.params.equation
     let result
     try
@@ -415,8 +415,8 @@ function daumNews(req,res){
         res.render('daum',{news})
     })
 }
-app.get('/',homeController)
-app.get('/calculator/:equation',calculatorController)
+app.get('/',homeControler)
+app.get('/calculator/:equation',calculatorControler)
 app.get('/daum',daumNews)
 
 app.listen(process.env.PORT,()=>console.log('good'))
