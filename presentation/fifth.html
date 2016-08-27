@@ -10,6 +10,8 @@
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js'></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
+
       
 <style>
     .btn-outline {
@@ -20,12 +22,39 @@
     dl dt {
         background-color:aliceblue;
     }
-    </style>
+    
+    div.questions {
+        height:40rem;
+        overflow-y:auto;
+    }
+    button {
+        display:inline-block;
+    }
+    div#chat {
+        top:0;
+        left:0;
+        position:fixed;
+        z-index:2;
+    }
+    
+</style>
     
 </head>
 <body>
-        <div class='reveal'>
+          <div id="chat" class=well>
+              <div class='questions'></div>
+              <form action=# class='from-group'>
+                  <input class='form-control' type=text name=id placeholder='질문자'>
+                  <textarea class='form-control' type=text name=text placeholder="질문내용"></textarea>
+                  <button class='btn btn-primary btn-lg' type=submit>질문하기</button>
+                <button class='btn btn-warning btn-lg' onclick='toggleQuestion()' id=toggle>질문란 접기</button>
+
+              </form>
+
+          </div>
+        <div class='reveal col-sm-10'>
             <div class='slides'>
+
                 <section>
                     <h1> node로 웹서비스 만들기</h1>
                     <h3>익게이</h3>
@@ -482,57 +511,25 @@ block content
            </div>
                       
    </div>
+
 <script src="/reveal/lib/js/head.min.js"></script>
 <script src="/reveal/js/reveal.js"></script>
 <script src="/reveal_config.js"></script>
-   <script>
+<script>
 
-Reveal.addEventListener( 'fragmentshown', function( event ) {
+    Reveal.addEventListener( 'fragmentshown', function( event ) {
     // event.fragment = the fragment DOM element
     if ($(event.fragment)[0].tagName === 'LI'){
         $(event.fragment).addClass('list-group-item-success')
         $(event.fragment).prev().removeClass('list-group-item-success')
     }
+
+    } );
+
+</script>
     
-} );
-
-
-    </script>
-    
-    <script >
-                        var trial=0
-                        var btn = d3.select('button')
-                        function stroll_around() {
-                            trial+=1
-                            if (trial>4)
-                                btn
-                                    .style('background-color','red')
-                                    .text('그만햌ㅋㅋㅋ')
-                            if (trial % 20 == 0){
-                                btn.text('미친놈일세;;;')
-                                d3.select('section#forfun').append('p').attr('class','stroll').text('그만!!!')
-                            }
-                            if (trial> 50)
-                                btn.text('이제 이스터애그 없어. 수업이나 들어.')
-                            if (trial > 500)
-                                btn.text('솔직히 이거 본 놈은, 코드를 뜯어봤거나 제대로 돌았다...')
-
-
-                            d3.selectAll('p.stroll')
-                                .style('position','absolute')
-                                .each(
-                                    function(d,i){
-                                        d3.select(this).transition().duration(500)
-                                            .style('top',Math.random()*400 + 'px')
-                                            .style('left',Math.random()*400 + 'px')
-                                            .style('font-size',Math.random()*20 + 20 + 'px')
-                                            .style('color',`rgb(${Math.round(Math.random()*255)},${Math.round(Math.random()*255)},${Math.round(Math.random()*255)})`)
-                                    }
-                                    
-                                )
-                        }
-                    </script>
-                    <script src='/analytics.js'></script>
+    <script src='/js/fifth.js'></script>
+    <script src='/analytics.js'></script>
 </body>
 
 </html>
