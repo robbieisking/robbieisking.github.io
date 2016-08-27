@@ -58,7 +58,7 @@
                     <h3> 솔직히 버튼 누르느라 정신이 없었죠?</h3>
                     <p> 다시 정리 해드리겠습니다.</p>
                     <ul class='list-group'>
-                        <li class="fragment list-group-item"><h3>controll</h3></li>
+                        <li class="fragment list-group-item"><h3>control</h3></li>
                         <li class="fragment list-group-item"><h3>model</h3></li>
                         <li class="fragment list-group-item"><h3>view</h3></li>
                     </ul>
@@ -71,26 +71,26 @@
                 </section>
                 <section>
                    <section>
-                    <h3> controller</h3>
+                    <h3> controler</h3>
                     <p class='fragment text-info'> 컨트롤러는 사용자의 하인입니다.</p>
                     <p class=fragment> 사용자가 url이나 각종 http request로 명령을 내리면, 무슨짓을 해야할지 미리 기억하고 있다가 그대로 수행합니다.</p>
                     <p class=fragment> 앞서 우리가 배웠던 url 처리가 바로 컨트롤러가 하는 역할입니다.</p>
-                    <p class='text-muted fragment'>(사실 이 부분에서 controller냐 router냐 구분하기도 하는데, 철학의 문제이기 때문에 그냥 뭉뚱그려서 controller라고 합시다.)</p>
+                    <p class='text-muted fragment'>(사실 이 부분에서 controler냐 router냐 구분하기도 하는데, 철학의 문제이기 때문에 그냥 뭉뚱그려서 controler라고 합시다.)</p>
                     <a href=# class='navigate-down enabled fragment'>
                         아래로
                     </a>
                     </section>
                     <section>
-                        <h3> express에서 controller의 모습</h3>
+                        <h3> express에서 controler의 모습</h3>
                         <pre>
                            <code>
 var express = require('express')
 var app = express()
 
-function controller (req,res){
+function controler (req,res){
    res.send('hello')
 }
-app.get('/', controller) 
+app.get('/', controler) 
 app.listen(process.env.PORT, () => {console.log(`port activated at ${process.env.PORT}`)})    
                            </code>
                        </pre>
@@ -100,16 +100,16 @@ app.listen(process.env.PORT, () => {console.log(`port activated at ${process.env
                        
                     </section>
                     <section>
-                        <h3> express에서 controller의 모습(발전된 버전)</h3>
+                        <h3> express에서 controler의 모습(발전된 버전)</h3>
                         <p class="text-muted">app.js</p>
                         <pre><code>
 /*...some codes ...*/
-var postController = require('./controllers/post')
+var postController = require('./controlers/post')
 app.use('/api/posts/',postController) // or postRouter
 /*... */
                        
                         </code></pre>
-                        <p class="text-muted">/controllers/post.js</p>
+                        <p class="text-muted">/controlers/post.js</p>
                         <pre><code>
 var router = require('express').Router()
 router.route('/')
