@@ -30,18 +30,11 @@ function stroll_around() {
         )
 }
 
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyBaZCtp1SgvfEcYFkxPbpUmHhsXs61r5F4",
-    authDomain: "seiyon-web-develope.firebaseapp.com",
-    databaseURL: "https://seiyon-web-develope.firebaseio.com",
-    storageBucket: "seiyon-web-develope.appspot.com",
-  };
-  firebase.initializeApp(config);
+var fireRef = new Firebase('https://seiyon-web-develope.firebaseio.com/presentation/fifth/')
 
 $('form').on('submit', function() {
     
-    firebase.database().ref('/presentation/fifth/').push({
+    fireRef.push({
         id:$('input[name="id"]').val(),
         text:$('textarea[name="text"]').val()
     })
@@ -49,25 +42,14 @@ $('form').on('submit', function() {
     $('textarea[name="text"]').val('')
     return false
 })
-/*
-firebase.database().ref('/presentation/fifth/').once('value',function(snap){
-    var questions = []
-    for (var key in snap.val())
-        questions.push(snap.val()[key])
-    questions.reverse()
-    var playground = d3.select('div.questions')
-    playground.selectAll('dl').data(questions).enter().append('dl')
-        .html(function(d){ return '<dt>' +d.id + '</dt>'+ '<dd>' + d.text + '</dd>'})
-        .exit().remove()
 
-})
-*/
 
-firebase.database().ref('/presentation/fifth/').on('child_added', function(data){
+fireRef.on('child_added', function(data){
     $('div.questions').prepend(`<dl><dt>${data.val().id}</dt><dd>${data.val().text}</dd></dl>`)
 })
 
 var isToggled=0
+
 function toggleQuestion() {
     isToggled = isToggled == 0 ? 1 : 0
     if(isToggled){
@@ -82,3 +64,6 @@ function toggleQuestion() {
 
     }
 }
+
+window.toggleQuestion = toggleQuestion
+window.stroll_around = stroll_around
