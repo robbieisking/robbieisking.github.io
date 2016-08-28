@@ -43,11 +43,21 @@ $('form').on('submit', function() {
     return false
 })
 
-
+fireRef.once('value', (snap) => {
+    let data_obj = snap.val()
+    let data = []
+    for (let key in data_obj)
+      data.push(data_obj[key])
+      
+    d3.select('div.questions').selectAll('dl').data(data).enter().append('dl')
+      .html( (d) => {return `<dt>${d.id}</dt><dd>${d.text}</dd>`})
+      .exit().remove()
+})
+/*
 fireRef.on('child_added', function(data){
     $('div.questions').prepend(`<dl><dt>${data.val().id}</dt><dd>${data.val().text}</dd></dl>`)
 })
-
+*/
 var isToggled=0
 
 function toggleQuestion() {
