@@ -53,11 +53,11 @@ fireRef.once('value', (snap) => {
       .html( (d) => {return `<dt>${d.id}</dt><dd>${d.text}</dd>`})
       .exit().remove()
 })
-/*
+
 fireRef.on('child_added', function(data){
     $('div.questions').prepend(`<dl><dt>${data.val().id}</dt><dd>${data.val().text}</dd></dl>`)
 })
-*/
+
 var isToggled=0
 
 function toggleQuestion() {
