@@ -506,7 +506,7 @@ block content
 
     Reveal.addEventListener( 'fragmentshown', function( event ) {
     // event.fragment = the fragment DOM element
-    if ($(event.fragment)[0].tagName === 'LI'){
+    if ($(event.fragment)[0].tagName === 'LI'){ //만약 list라면 fragment시 초록색 배경화면 효과를 준다
         $(event.fragment).addClass('list-group-item-success')
         $(event.fragment).prev().removeClass('list-group-item-success')
     }

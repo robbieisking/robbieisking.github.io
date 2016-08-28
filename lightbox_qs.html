@@ -21,59 +21,69 @@
     dl dt {
         background-color:aliceblue;
     }
-</style>
+
+  </style>
 </head>
 
 <body>
   <div class=container>
- <div id="chat" class=well>
-  <div class='questions'></div>
-  <form action=# class='from-group'>
+    <div id="chat" class=well>
+      <div class='questions'>
+        <div id=loader_container></div>
+      </div>
+    <form action=# class='from-group'>
       <input class='form-control' type=text name=id placeholder='질문자'>
       <textarea class='form-control' type=text name=text placeholder="질문내용"></textarea>
       <button class='btn btn-primary btn-block' type=submit>질문하기</button>
-  </form>
-</div>
+    </form>
+    </div>
   </div>
 
 
-
-<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js'></script>
-<script src="//code.jquery.com/jquery-latest.js"></script>
-<script src="//cdn.rawgit.com/noelboss/featherlight/1.5.0/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="/js/firebase.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src='/js/loading_icon.js'></script>
+  <script src="//code.jquery.com/jquery-latest.js"></script>
+  <script src="/js/firebase.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
 
-
-<script type='text/babel'>
+  <script>
+    var myLoader = loader({width: 200, height: 200, container: "#loader_container", id: "loader"});
+    myLoader() // copyright:Matthew Woelk
+    
     var fireRef = new Firebase('https://seiyon-web-develope.firebaseio.com/presentation/fifth/')
 
+    // put form data into firebase/presentation/fifth/ 
+    // note that firebase is tree-like structure, and pushed data also child of 'fifth' node. NOT ARRAY!!!
     $('form').on('submit', function() {
-
         fireRef.push({
             id:$('input[name="id"]').val(),
             text:$('textarea[name="text"]').val()
         })
+        // empty the form
         $('input[name="id"]').val('')
         $('textarea[name="text"]').val('')
-        return false
+        return false // prevent from redirection(default behavior when form submited)
     })
 
-    fireRef.once('value', (snap) => {
-        let data_obj = snap.val()
-        let data = []
-        for (let key in data_obj)
+    // initialize questions. once means only single attemption to retrive data from firebase.
+    fireRef.once('value', function (snap) {
+        var data_obj = snap.val() 
+        // convert json to array. note that d3 binding data must be array[very important]
+        var data = []
+        for (var key in data_obj)
           data.push(data_obj[key])
-
-        d3.select('div.questions').selectAll('dl').data(data).enter().append('dl')
-          .html( (d) => {return `<dt>${d.id}</dt><dd>${d.text}</dd>`})
-          .exit().remove()
+          
+        d3.select('div#loader_container').remove() //remove loading icon
+        var playground = d3.select('div.questions')
+        playground.selectAll('dl').data(data).enter().append('dl')
+          .html( function (d)  {return '<dt>' + d.id + '</dt><dd>' + d.text + '</dd>'})
+          
     })
 
     fireRef.on('child_added', function(data){
-        $('div.questions').prepend(`<dl><dt>${data.val().id}</dt><dd>${data.val().text}</dd></dl>`)
+        $('div.questions').prepend('<dl><dt>' + data.val().id + '</dt><dd>' + data.val().text + '</dd></dl>')
     })
-</script>
+  </script>
 </body>  
 
 </html>
