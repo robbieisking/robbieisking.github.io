@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+  <meta chaset='utf-8'>
+    <link rel='stylesheet' type='text/css' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+
+  <style>
+      div.questions {
+        overflow-y:auto;
+    }
+    button {
+        display:inline-block;
+    }
+    div#chat {
+        align-content:center;
+    }    
+    dl dt {
+        background-color:aliceblue;
+    }
+</style>
+</head>
+
+<body>
+  
+ <div id="chat" class=well>
+  <div class='questions'></div>
+  <form action=# class='from-group'>
+      <input class='form-control' type=text name=id placeholder='질문자'>
+      <textarea class='form-control' type=text name=text placeholder="질문내용"></textarea>
+      <button class='btn btn-primary btn-block' type=submit>질문하기</button>
+  </form>
+</div>
+
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js'></script>
+<script src="//code.jquery.com/jquery-latest.js"></script>
+<script src="//cdn.rawgit.com/noelboss/featherlight/1.5.0/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/firebase.js"></script>
+
+<script>
+var fireRef = new Firebase('https://seiyon-web-develope.firebaseio.com/presentation/fifth/')
+
+$('form').on('submit', function() {
+    
+    fireRef.push({
+        id:$('input[name="id"]').val(),
+        text:$('textarea[name="text"]').val()
+    })
+    $('input[name="id"]').val('')
+    $('textarea[name="text"]').val('')
+    return false
+})
+
+fireRef.once('value', (snap) => {
+    let data_obj = snap.val()
+    let data = []
+    for (let key in data_obj)
+      data.push(data_obj[key])
+      
+    d3.select('div.questions').selectAll('dl').data(data).enter().append('dl')
+      .html( (d) => {return `<dt>${d.id}</dt><dd>${d.text}</dd>`})
+      .exit().remove()
+})
+
+fireRef.on('child_added', function(data){
+    $('div.questions').prepend(`<dl><dt>${data.val().id}</dt><dd>${data.val().text}</dd></dl>`)
+})
+
+
+</script>
+</body>  
+
+</html>

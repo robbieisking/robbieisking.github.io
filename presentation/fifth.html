@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/reveal/css/reveal.css">
     <link rel="stylesheet" href="/reveal/css/theme/white.css">
     <link rel="stylesheet" href="/reveal/lib/css/zenburn.css">
+  <link href="//cdn.rawgit.com/noelboss/featherlight/1.5.0/release/featherlight.min.css" type="text/css" rel="stylesheet" />
 
 
       
@@ -20,34 +21,15 @@
         background-color:aliceblue;
     }
     
-    div.questions {
-        height:25rem;
-        overflow-y:auto;
-    }
-    button {
-        display:inline-block;
-    }
-    div#chat {
-        position:fixed;
-        z-index:2;
-    }
     
 </style>
     
 </head>
 <body>
-          <div id="chat" class=well>
-              <div class='questions'></div>
-              <form action=# class='from-group'>
-                  <input class='form-control' type=text name=id placeholder='질문자'>
-                  <textarea class='form-control' type=text name=text placeholder="질문내용"></textarea>
-                  <button class='btn btn-primary btn-lg' type=submit>질문하기</button>
-                <button class='btn btn-warning btn-lg' onclick='toggleQuestion()' id=toggle>질문란 접기</button>
-
-              </form>
-
-          </div>
-        <div class='reveal col-sm-10'>
+         <!-- <a href='/lightbox_qs.html' data-featherlight='iframe'>열기</a> -->
+         <button class='btn btn-primary btn-block' onclick="$.featherlight({iframe: '/lightbox_qs.html', iframeMaxWidth: '100%', iframeWidth: 500,
+    iframeHeight: 800})">질문</button>
+        <div class='reveal'>
             <div class='slides'>
 
                 <section>
@@ -510,10 +492,11 @@ block content
 <script src="/reveal/lib/js/head.min.js"></script>
 <script src="/reveal/js/reveal.js"></script>
 <script src="/reveal_config.js"></script>
-<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
-<script src="/js/firebase.js"></script>
+<script src="//code.jquery.com/jquery-latest.js"></script>
+<script src="//cdn.rawgit.com/noelboss/featherlight/1.5.0/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
 
 <script>
 

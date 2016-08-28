@@ -30,50 +30,6 @@ function stroll_around() {
         )
 }
 
-var fireRef = new Firebase('https://seiyon-web-develope.firebaseio.com/presentation/fifth/')
 
-$('form').on('submit', function() {
-    
-    fireRef.push({
-        id:$('input[name="id"]').val(),
-        text:$('textarea[name="text"]').val()
-    })
-    $('input[name="id"]').val('')
-    $('textarea[name="text"]').val('')
-    return false
-})
 
-fireRef.once('value', (snap) => {
-    let data_obj = snap.val()
-    let data = []
-    for (let key in data_obj)
-      data.push(data_obj[key])
-      
-    d3.select('div.questions').selectAll('dl').data(data).enter().append('dl')
-      .html( (d) => {return `<dt>${d.id}</dt><dd>${d.text}</dd>`})
-      .exit().remove()
-})
-
-fireRef.on('child_added', function(data){
-    $('div.questions').prepend(`<dl><dt>${data.val().id}</dt><dd>${data.val().text}</dd></dl>`)
-})
-
-var isToggled=0
-
-function toggleQuestion() {
-    isToggled = isToggled == 0 ? 1 : 0
-    if(isToggled){
-        d3.select('div.questions').transition().duration(500)
-            .style('height','1rem')
-        $('button#toggle').text('질문란 펼치기')
-    }
-    else{
-         d3.select('div.questions')
-            .style('height','40rem')
-         $('button#toggle').text('질문란 접기')
-
-    }
-}
-
-window.toggleQuestion = toggleQuestion
 window.stroll_around = stroll_around
