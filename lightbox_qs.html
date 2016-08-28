@@ -2,8 +2,9 @@
 <html>
 <head>
   <meta chaset='utf-8'>
-    <link rel='stylesheet' type='text/css' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
-    <meta name="viewport" content="width=device-width, user-scalable=no">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+
+  <link rel='stylesheet' type='text/css' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
 
 
   <style>
@@ -45,35 +46,33 @@
 
 
 <script type='text/babel'>
-var fireRef = new Firebase('https://seiyon-web-develope.firebaseio.com/presentation/fifth/')
+    var fireRef = new Firebase('https://seiyon-web-develope.firebaseio.com/presentation/fifth/')
 
-$('form').on('submit', function() {
-    
-    fireRef.push({
-        id:$('input[name="id"]').val(),
-        text:$('textarea[name="text"]').val()
+    $('form').on('submit', function() {
+
+        fireRef.push({
+            id:$('input[name="id"]').val(),
+            text:$('textarea[name="text"]').val()
+        })
+        $('input[name="id"]').val('')
+        $('textarea[name="text"]').val('')
+        return false
     })
-    $('input[name="id"]').val('')
-    $('textarea[name="text"]').val('')
-    return false
-})
 
-fireRef.once('value', (snap) => {
-    let data_obj = snap.val()
-    let data = []
-    for (let key in data_obj)
-      data.push(data_obj[key])
-      
-    d3.select('div.questions').selectAll('dl').data(data).enter().append('dl')
-      .html( (d) => {return `<dt>${d.id}</dt><dd>${d.text}</dd>`})
-      .exit().remove()
-})
+    fireRef.once('value', (snap) => {
+        let data_obj = snap.val()
+        let data = []
+        for (let key in data_obj)
+          data.push(data_obj[key])
 
-fireRef.on('child_added', function(data){
-    $('div.questions').prepend(`<dl><dt>${data.val().id}</dt><dd>${data.val().text}</dd></dl>`)
-})
+        d3.select('div.questions').selectAll('dl').data(data).enter().append('dl')
+          .html( (d) => {return `<dt>${d.id}</dt><dd>${d.text}</dd>`})
+          .exit().remove()
+    })
 
-
+    fireRef.on('child_added', function(data){
+        $('div.questions').prepend(`<dl><dt>${data.val().id}</dt><dd>${data.val().text}</dd></dl>`)
+    })
 </script>
 </body>  
 
