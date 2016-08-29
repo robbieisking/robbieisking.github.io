@@ -5,6 +5,9 @@ source: http://bl.ocks.org/Mattwoelk/6132258
 Woelk! i bet you would not even open this content, but if you feel uncomfortable with using this code, 
 please email me:robbieinertia@gmail.com
 then i'll reply asap. thanks for sharing this stunning idea!
+
+ps. but it only works at v3.5.17 ... no compatible with any other version.
+especially, d3.svg.arc()
 */
 function loader(config) {
   return function() {
