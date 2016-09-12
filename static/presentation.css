@@ -1,0 +1,23 @@
+ .btn-outline {
+  background-color: transparent;
+  color: inherit;
+  transition: all .5s;
+}
+dl dt {
+  background-color:aliceblue;
+}
+#mybutton{
+  position:fixed;
+  z-index:1;
+}
+    
+div.questions {
+  overflow-y:auto;
+  height:30rem;
+}
+button {
+  display:inline-block;
+}
+div#chat {
+  align-content:center;
+}    

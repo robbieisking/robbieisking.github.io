@@ -47,7 +47,9 @@
            {"href":"https://robbieisking.github.io/presentation/third.html", "target":"_blank" , "subtitle":"csv파일 읽고,쓰고, 검색하기"},
 
            {"href":"https://robbieisking.github.io/presentation/forth.html", "target":"_blank" , "subtitle":"template engine 직접 만들기"},
-            {"href":"https://robbieisking.github.io/presentation/fifth.html", "target":"_blank" , "subtitle":"express 시작하기"}        
+            {"href":"https://robbieisking.github.io/presentation/fifth.html", "target":"_blank" , "subtitle":"express 시작하기"},
+                {"href":"https://robbieisking.github.io/presentation/sixth.html", "target":"_blank" , "subtitle":"db(firebase)로 간단한 게시판 만들기"}        
+
 
   ]
 }

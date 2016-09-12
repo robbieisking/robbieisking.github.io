@@ -1,0 +1,389 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset='utf-8' >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/reveal/css/reveal.css">
+    <link rel="stylesheet" href="/reveal/css/theme/white.css">
+    <link rel="stylesheet" href="/reveal/lib/css/zenburn.css">
+    <link href="//cdn.rawgit.com/noelboss/featherlight/1.5.0/release/featherlight.min.css" type="text/css" rel="stylesheet" />
+    <link rel=stylesheet href='/static/presentation.css'>
+</head>
+<body>
+  <button class='btn btn-primary btn-lg btn-block' onclick="$.featherlight({iframe: '/lightbox_qs.html', iframeMaxWidth: '100%',iframeWidth: '40rem',iframeHeight: '800rem',overflow:scroll})" id=mybutton>질문</button>
+  <div class='reveal container'>
+    <div class='slides'>
+
+    <section>
+      <h1>node로 웹개발하기</h1>
+      <p class="text-muted">익께이</p>
+      <h4>database(quick and dirty)</h4>
+    </section>
+    <section>
+      <p>데이터베이스를 알려드리겠다고 했는데요,</p>
+      <p>이론만 알려주면 지루할까봐 바로 실습으로 들어가겠습니다.</p>
+    </section>
+    <section data-transition='fade-out'>
+      <p>데이터베이스는 아래 4가지 방법만 알고 있으면 일단 기초는 하는겁니다</p>
+      <ul>
+        <li class="fragment">Create</li>
+        <li class="fragment">Update</li>
+        <li class="fragment">Read</li>
+        <li class="fragment">Delete</li>
+      </ul>
+    </section>
+    <section data-transition="fade-in slide-out">
+      <p>데이터베이스의 종류도 잠시 잊읍시다.</p>
+      <p class="fragment"> 당장 사용할 수 있는 데이터베이스로 실습부터 해보고</p>
+      <p class="fragment text-info"> 유용함을 우선 이해한 후에, 다양한 데이터베이스를 알아봅시다.</p>
+    </section>
+    <section>
+      <section data-background-image='https://1.bp.blogspot.com/-YIfQT6q8ZM4/Vzyq5z1B8HI/AAAAAAAAAAc/UmWSSMLKtKgtH7CACElUp12zXkrPK5UoACLcB/s1600/image00.png'>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <a href=#/4/2>아래로</a>
+      </section>
+      <section>
+        <h3>firebase</h3>
+        <p>설정하기 아주 쉽고, <span class=text-danger>실시간 통신이 가능한</span> 데이터베이스입니다.</p>
+        <p>이제 구글이 관리하기 때문에 신뢰도도 높습니다</p>
+        <a href=#/4/3>아래로</a>
+      </section>
+      <section data-background-image='http://i.imgur.com/DaHI7v8.png' data-background-size='90%'>
+        <h3>firebase의 과금정책</h3>
+      </section>
+    </section>
+    <section>
+      <h3>step 1: firebase 가입하기</h3>
+      <p>구글 아이디가 있으면 쉽게 가입할 수 있습니다.</p>
+      <p><a href=https://firebase.google.com>주소</a></p>  
+      <p class="text-muted">예전 사이트(https://www.firebase.com/)로 들어가지 마세요</p>
+    </section>
+    <section>
+      <h3>step 2: 콘솔로 들어가기</h3>
+      <p>우측 상단의 콘솔로 이동을 누르시면 아래와 같은 화면이 뜹니다</p>
+      <p>당연히 새 프로젝트를 만들어야겠죠?</p>
+      <img data-src='http://i.imgur.com/5EZkXDj.png'>
+    </section>
+    <section>
+      <section>
+        <h3>step 3: 권한 설정하기</h3>
+        <p>데이터베이스의 중요한 특징 중 하나가 바로 권한설정인데요,</p>
+        <p class=text-danger>지금은 중국 해커 성님들도 모두 포용해봅시다(전면개방)</p>
+        <a href=#/4/3>아래로</a>
+
+      </section>
+      <section data-background-image='http://i.imgur.com/Gt3KYpO.png'>
+        <p style='background-color:white'> 죄측 database 탭 => 규칙</p>
+        <p>딱봐도 위험해보이도록 아래와 같이 설정해봅시다.</p>
+        <p class="text-muted">.read:true, .write:true</p>
+      </section>
+    </section>
+    <section>
+       <p>그리고 database탭 누르시면 나오는 ~.firebaseio.com 주소를 외웁시다.</p>
+      <p>자 , 다시 <a href=c9.io>c9.io</a>로 들어가볼까요?</p>
+    </section>
+    <section>
+       <section>
+        <h3>Create and Update</h3>
+        <p>firebase는 REST API를 지원하기때문에</p>
+        <p>url과 http method(get,post,put,delete...)만으로</p>
+        <p>db로 할 수 있는 거의 모든 작업이 가능합니다.</p>
+        <p class=text-muted>지금시점에선 API란 url로 서비스를 이용하는 방법 정도로만 이해합시다.</p>
+        <a href="#/9/2">아래로</a>
+      </section>
+      <section>
+        <h3>Create and Update</h3>
+        <p>아래와 같이 요청을 주면, 데이터가 저장됩니다</p>
+        <p>(firebase console => database에서 직접 확인해보세요)</p>
+        <div class="well">
+           <p>method:post</p>
+           <p>data: '{"key":"value"}' (json parsable string)</p>
+          <code>{주소}.firebaseio.com/{저장할}/{위치}.json</code>
+
+          <p class="text-info"> 해당 경로에 data가 push됨(unique key도 부여됨)</p>
+
+        </div>
+        <a href="#/9/3">예제는 아래로</a>
+
+      </section>
+        <section>
+          <h3>Create and Update</h3>
+          <p>아래와 같이 입력하면, {내주소}.firebaseio.com/test.json에</p>
+          <p>{"test":"ok"} 라는 json이 저장됩니다.</p>
+          <pre><code>
+'use strict'          
+const request = require('request')
+request.post({url:'https://{내주소}.firebaseio.com/test.json',form:'{"test":"ok"}'}, 
+         (err,response,data) => {
+         if (err)
+           throw err
+         console.log(data)
+         }
+)
+          </code></pre>
+          <p class=fragment>참고로 firebase는 create라는 명령어가 따로 없습니다.</p>
+           <p class=fragment>만약 ~/test라는 경로에 데이터가 없다면, 새로 만들어버립니다.</p>
+           <a href='#/9/4'>아래로</a>
+        </section>
+        <section>
+          <h3>Create and Update</h3>
+          <p>만약 기존의 데이를 다른 것으로 바꾸고 싶다면</p>
+        <div class="well">
+           <p>method:put</p>
+           <p>data: '{"key":"value"}' (json parsable string)</p>
+          <code>{주소}.firebaseio.com/{저장할}/{위치}.json</code>
+          <p class="text-info"> 해당 경로에 data가 입력해준 data로 바뀜</p>
+        </div>
+        <p>이렇게 입력해주시면 됩니다.</p>  
+         <a href='#/9/5'>예제 아래로</a>
+
+        </section>
+        <section>
+          <h3>Create and Update</h3>
+          <p>즉 아래와같이 입력하면 되는 것이죠.</p>
+          <pre><code>
+'use strict'          
+const request = require('request')
+request.put({url:'https://{내주소}.firebaseio.com/test.json',form:'{"test":"not ok"}'}, 
+         (err,response,data) => {
+         if (err)
+           throw err
+         console.log(data)
+         }
+)
+          </code></pre>
+
+          
+        </section>
+      </section>
+    <section>
+      <section>
+        <h3>Read</h3>
+        <p>아래와 같이 입력하면 data를 볼 수 있습니다.</p>
+        <div class="well">
+           <p>method:get</p>
+          <code>{주소}.firebaseio.com/{저장된}/{위치}.json</code>
+          <p class="text-info"> 해당 경로에 존재하는 모든 데이터를 꺼냄</p>
+        </div>
+        <a href="#/10/2">예제는 아래로</a>
+
+      </section>
+      <section>
+        <h3>Read</h3>
+ <pre><code>
+'use strict'          
+const request = require('request')
+request.get('https://{내주소}.firebaseio.com/test.json', 
+         (err,response,data) => {
+         if (err)
+           throw err
+         console.log(data)
+         }
+)
+          </code></pre>
+        
+      </section>
+    </section>
+    <section>
+      <section>
+        <h3>Delete</h3>
+        <div class="well">
+           <p>method:delete</p>
+          <code>{주소}.firebaseio.com/{저장된}/{위치}.json</code>
+          <p class="text-info"> 해당 경로에 존재하는 모든 데이터를 지움</p>
+        </div>
+        <a href="#/11/2">예제는 아래로</a>
+
+      </section>
+      <section>
+        <h3>Delete</h3>
+ <pre><code>
+'use strict'          
+const request = require('request')
+request.delete('https://{내주소}.firebaseio.com/test.json', 
+         (err,response,data) => {
+         if (err)
+           throw err
+         console.log(data)
+         }
+)
+          </code></pre>
+        
+      </section>
+    </section>
+    <section>
+      <p>우리는 이제 CURD(Create,Update,Read,Delete)를 다 할 수 있습니다!!</p>
+      <p>그러면 간단한 게시판 서비스를 만들어보도록 하죠.</p>
+    </section>
+    <section>
+      <p class="text-muted">server.js</p>
+      <pre><code>
+'use strict'
+const express =require('express')
+const app = express()
+const path = require('path')
+const request = require('request')
+const bodyParser = require('body-parser')
+
+app.set('view engine','pug')
+app.set('views',path.join(__dirname,'client'))
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded( {extended:true}))
+
+function showList (req,res) {
+    request('https://{내주소}.firebaseio.com/board.json', 
+        (err,response,data)=>{
+            let raw = JSON.parse(data) //text -> json
+            if (err)
+                throw err
+            /*
+              @posts: {id,text,_id}
+            */
+             let posts = []
+             for (let key in raw){
+                raw[key]['_id'] = key
+                posts.push(raw[key])
+             }
+            console.log('posts',posts)
+            res.render('home',{posts})
+        })
+}
+function postItem(req,res) {
+    let insertedForm = `{"id":"${req.body.id}","text":"${req.body.text}"}`
+    request.post({url:'https://{내주소}.firebaseio.com/board.json',form:insertedForm},
+        (err,response,data)=>{
+            if (err)
+                throw err
+            console.log(response)
+            res.redirect('/')
+        
+    })
+}
+/*
+  @req.params.deleteId: 지울 대상의 id
+*/
+function deleteItem (req,res){
+    console.log('knocked')
+    request.delete('https://{내주소}.firebaseio.com/board/'+req.params.deleteId+'.json',
+        (err,response,data) => {
+            if (err)
+                throw err
+            res.send('1')//client에서 1이면 성공으로 받아들임(client에서도 따로 짜야함)
+        }
+    )
+}
+
+
+app.get('/',showList)
+app.post('/',postItem)
+app.delete('/api/:deleteId',deleteItem)
+
+app.listen(process.env.PORT,()=>console.log('good'))
+        
+      </code></pre>
+      
+    </section>
+    <section>
+      <p class="text-muted">layout.pug</p>
+      <pre><code>
+doctype html
+html
+    head
+        meta(charset='utf-8')
+        meta(name='viewpoint' content='width=device-width')
+        script(src='https://code.jquery.com/jquery-3.1.0.min.js')
+        link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    body
+        div.container
+            block content
+      </code></pre>
+    </section>
+    <section>
+      <p class="text-muted">home.pug</p>
+      <pre><code>
+extends layout
+block content 
+    div.jumbotron
+        //-검색: bootstrap jumbotron
+        h1.text-center hello 
+        //-검색: bootstrap typo
+        p.text-center this is our homepage
+    div.board
+        dl
+            each item in posts
+                dt id:#{item.id} 
+                dd 내용:#{item.text}
+                a(onclick=`deleteItem("${item._id}")`) delete
+        form(action='/' method='POST').form-group
+            input(type='text' name='id' placeholder='이름' class='form-control')
+            input(type='text' name='text' placeholder='잡담 아무거나' class='form-control')
+            input(type='submit' value='제출')
+            
+    script.
+       /*
+         @id: 서버로 보낼 지워버릴 id(실제로는 _id를 뜻한다)
+       *?
+        function deleteItem(id){
+            $.ajax (
+                {
+                    url:`/api/${id}`,
+                    method:'delete',
+                    success: (data) => {
+                        if (data == '1')
+                            location.href='/' // refresh
+                    }
+                }
+            )
+        }
+         
+      </code></pre>
+    </section>
+    <section>
+      <p>어때요, 게시판을 만들 수 있었나요?</p>
+      <p>모르는거 다 아니까 질문좀 해주세요...</p>
+    </section>
+    <section>
+      <p>db를 다루는 법은 넘나 중요하기 때문에</p>
+      <p>다음에는 다른 db(mysql,amazon RDB)로</p>
+      <p>정말 본격적인 데이터베이스 강의를 진행해보겠습니다.</p>
+    </section>
+    <section>
+      <p>감사합니다.</p>
+    </section>
+    </div>
+                      
+  </div>
+
+<script src="/reveal/lib/js/head.min.js"></script>
+<script src="/reveal/js/reveal.js"></script>
+<script src="/reveal_config.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+<script src="//code.jquery.com/jquery-latest.js"></script>
+<script src="//cdn.rawgit.com/noelboss/featherlight/1.5.0/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+
+<script>
+
+    Reveal.addEventListener( 'fragmentshown', function( event ) {
+    // event.fragment = the fragment DOM element
+    if ($(event.fragment)[0].tagName === 'LI'){ //만약 list라면 fragment시 초록색 배경화면 효과를 준다
+        $(event.fragment).addClass('list-group-item-success')
+        $(event.fragment).prev().removeClass('list-group-item-success')
+    }
+
+    } );
+
+</script>
+    
+<script src='/analytics.js'></script>
